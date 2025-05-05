@@ -1,6 +1,7 @@
 let bombakSzama = 0;
 let zaszlokSzama = 0;
 let jatszikE = false;
+let elsoKattintasTortentE = false;
 let x = 9;
 let y = 9;
 let palyaTomb;
@@ -33,19 +34,25 @@ function tombGeneral(x, y){
     else if(x === 16 && y === 30){
         bombakSzama = 99;
     }
+    return matrix;
+}
 
+function palyaFeltoltes(matrix, indexX, indexY){
+    
     //létrehozunk egy két dimenziós tömböt, amiben a matrix tömb összes indexét eltároljuk
     const koordinatak = [];
     for(let i = 0; i < x; i++){
         for(let j = 0; j < y; j++){
-         koordinatak.push([i, j]);   
+            if (i !== indexX || j !== indexY) { //első klikk koordináták, nem lehet bomba (indexX és indexY)
+                koordinatak.push([i, j]);
+            }
         }
     }
 
     //Fisher-Yates algoritmus
     for(let i = koordinatak.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
-    [koordinatak[i], koordinatak[j]] = [koordinatak[j], koordinatak[i]];
+        [koordinatak[i], koordinatak[j]] = [koordinatak[j], koordinatak[i]];
     }
 
     //bombák véletlenszerű elhelyezése
@@ -149,13 +156,18 @@ function mezoKeszito(x, y, mezo){
             return;
         }
         mezo.feldorditottE = true;
-        const indexX = event.target.dataset.indexX; //aktuális mező koordinátájának elmentése
-        const indexY = event.target.dataset.indexY;
+        const indexX = parseInt(event.target.dataset.indexX); //aktuális mező koordinátájának elmentése
+        const indexY = parseInt(event.target.dataset.indexY);
         console.log(indexX, indexY);
         ujMezo.classList.remove('leforditott');
+        if(!elsoKattintasTortentE){
+            palyaTomb = palyaFeltoltes(palyaTomb, indexX, indexY)
+            elsoKattintasTortentE = true;
+        }
         if(mezo.bombaE){
             ujMezo.classList.add('bomba');
-            bombaKattint(indexX, indexY);
+            //bombaKattint(indexX, indexY);
+            console.log('BUMMM');
         }
         else if(mezo.mezokErteke !== 0){
             ujMezo.classList.add('szam');
@@ -183,12 +195,8 @@ function mezoKeszito(x, y, mezo){
     return ujMezo;
 }
 
-function bombaKattint(x, y){
-    let jatszikE = false;
-}
-
 function uresKattint(x, y){
-
+    console.log('ures');
 }
 
 
