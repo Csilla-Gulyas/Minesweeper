@@ -1,0 +1,20 @@
+.bomba{
+    background-image: url("./bomb.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.aBomba{
+    background-image: url("./piros_bomba.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.zaszlo{
+    background-image: url("./flag.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

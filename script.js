@@ -2,9 +2,10 @@ let bombakSzama = 0;
 let zaszlokSzama = 0;
 let jatszikE = false;
 let elsoKattintasTortentE = false;
-let x = 9;
-let y = 9;
+let x = 2;
+let y = 2;
 let palyaTomb;
+
 
 jatekIndit();
 
@@ -15,7 +16,7 @@ function tombGeneral(x, y){
         const sorok = [];
         for(let j = 0; j < y; j++){
             sorok.push({
-                feldorditottE: false,
+                felforditottE: false,
                 zaszlosE: false,
                 bombaE: false,
                 mezokErteke: 0
@@ -33,6 +34,9 @@ function tombGeneral(x, y){
     }
     else if(x === 16 && y === 30){
         bombakSzama = 99;
+    }
+    else if(x === 2 && y ===2){
+        bombakSzama = 1;
     }
     return matrix;
 }
@@ -122,6 +126,8 @@ function palyaFeltoltes(matrix, indexX, indexY){
 function jatekIndit(){
     palyaTomb = tombGeneral(x, y, 10);
     palyaGeneral(palyaTomb);
+    jatszikE = true;
+    zaszloKezdoAllapot();
 }
 
 function palyaGeneral(matrix){
@@ -148,14 +154,17 @@ function mezoKeszito(x, y, mezo){
     ujMezo.dataset.indexY = y.toString();
     ujMezo.classList.add('mezok');
     ujMezo.style.border = '2px solid black';
-    if(!mezo.feldorditottE){
+    if(!mezo.felforditottE){
         ujMezo.classList.add('leforditott');
     }
     ujMezo.addEventListener('click', (event)=>{//Klikkelés lekezelése szám mezőnél, bombánál és üres mezőnél
+        if(!jatszikE){//ha nem játszik, ne működjenek az event listener-ek
+            return;
+        }
         if(ujMezo.classList.contains('zaszlo')){//ha zászló van rajta bal kattintás nem lehetséges
             return;
         }
-        mezo.feldorditottE = true;
+        mezo.felforditottE = true;
         const indexX = parseInt(event.target.dataset.indexX); //aktuális mező koordinátájának elmentése
         const indexY = parseInt(event.target.dataset.indexY);
         console.log(indexX, indexY);
@@ -166,29 +175,41 @@ function mezoKeszito(x, y, mezo){
         }
         if(mezo.bombaE){
             ujMezo.classList.add('bomba');
-            //bombaKattint(indexX, indexY);
+            bombaKattint(indexX, indexY);
             console.log('BUMMM');
         }
         else if(mezo.mezokErteke !== 0){
             ujMezo.classList.add('szam');
             ujMezo.innerText = mezo.mezokErteke;
+            nyert();
         }
         else{
             ujMezo.classList.add('ures');
             uresKattint(indexX, indexY);
+            nyert();
         }
     })
 
     ujMezo.addEventListener('contextmenu', (event)=>{//jobb klikkel zászló felrakása a mezőre, ha fent van még egy jobb klikkel le lehet venni
         event.preventDefault();
-        if (!mezo.feldorditottE) {
-            if (!ujMezo.classList.contains('zaszlo')) {
-                ujMezo.classList.add('zaszlo'); // Hozzáadja a zászlót
+        const indexX = parseInt(event.target.dataset.indexX); //aktuális mező koordinátájának elmentése
+        const indexY = parseInt(event.target.dataset.indexY);
+        let csokkentsukE = true;
+        if(!jatszikE){//ha nem játszik, ne működjenek az event listener-ek
+            return;
+        }
+        if (!mezo.felforditottE) {
+            if (!palyaTomb[indexX][indexY].zaszlosE) {
+                csokkentsukE = true;
+                zaszloSzamlalo(csokkentsukE, indexX, indexY);
+                if(elsoKattintasTortentE){
+                    nyert();
+                }
             }
             else
             {
-                ujMezo.classList.remove('zaszlo'); // Ha már van zászló, eltávolítja
-                ujMezo.classList.add('leforditott');
+                csokkentsukE = false;
+                zaszloSzamlalo(csokkentsukE, indexX, indexY);
             }
         }
     })
@@ -199,8 +220,101 @@ function uresKattint(x, y){
     console.log('ures');
 }
 
+function bombaKattint(x, y){
+    jatszikE = false; //játék vége
+    for(let i = 0; i < palyaTomb.length; i++){
+        for(let j = 0; j < palyaTomb[i].length; j++){
+            const mezo = palyaTomb[i][j];
+            if(mezo.bombaE){
+                const elem = elementLekereseIndexekkel(i, j);
+                //TODO: lekezelni, ha fel van fordítva
+                elem.classList.remove('leforditott');
+                elem.classList.add('bomba');
+                if(i == x && j == y){
+                    elem.classList.add('aBomba'); //az a bomba amire először kattintottunk, így külön lehet formázni
+                }
+            }
+        }
+    }
+    const vesztettel = document.createElement('div'); //vesztés tényének kiírása egy div-be
+    vesztettel.textContent = 'Vesztettél!';
+    vesztettel.classList.add('vesztettel');
+    vesztettel.classList.add('beugroDoboz'); //ezt majd a nyertes div-hez is akarom, alapvető formázások ugyanazok
+    document.body.appendChild(vesztettel);
+}
+
+function elementLekereseIndexekkel(x, y){
+    const elem = document.querySelector(`[data-index-x="${x}"][data-index-y="${y}"]`);
+    return elem;
+}
 
 
+
+function nyert(){
+    let nyertEFelfedve = true;
+    let nyertEZaszlokkal = true;
+    let nincsTevesZaszlo = true;
+    for(let i = 0; i < palyaTomb.length; i++){
+        for(let j = 0; j < palyaTomb[i].length; j++){
+            const mezo = palyaTomb[i][j];
+            if(mezo.bombaE && !mezo.zaszlosE){//van-e olyan mező, ami bomba, de nincs rajta zászló
+                nyertEZaszlokkal = false;
+            }
+            if(!mezo.bombaE && !mezo.felforditottE){//van-e olyan mező, ami bomba, de nincs felfordítva
+                nyertEFelfedve = false;
+            }
+            if (!mezo.bombaE && mezo.zaszlosE) {//van-e olyan mező, ami nem bomba, de van rajta zászló
+                nincsTevesZaszlo = false;
+            }
+        }
+    }
+
+    if(nyertEFelfedve || (nyertEZaszlokkal && nincsTevesZaszlo)){
+        jatszikE = false;
+        const nyertel = document.createElement('div'); //nyerés tényének kiírása egy div-be
+        nyertel.textContent = 'Gratulálok, nyertél!';
+        nyertel.classList.add('nyertel');
+        nyertel.classList.add('beugroDoboz');
+        document.body.appendChild(nyertel);
+    }
+}
+
+function zaszloKezdoAllapot(){
+    zaszlokSzama = bombakSzama;
+    const zaszlok = document.createElement('div'); //zaszló számláló div
+    zaszlok.textContent = zaszlokSzama; //megadom az értékét
+    zaszlok.classList.add('zaszloSzamol');
+    const tablaFelett = document.getElementById('tablaFelett');
+    tablaFelett.appendChild(zaszlok);
+}
+
+function zaszloSzamlalo(csokkentsukE, indexX, indexY){
+    const ujMezo = elementLekereseIndexekkel(indexX, indexY);
+    if(csokkentsukE){
+        if(zaszlokSzama >= 1){
+            ujMezo.classList.add('zaszlo'); // Hozzáadja a zászlót
+            
+            palyaTomb[indexX][indexY].zaszlosE = true;
+
+            zaszlokSzama--;
+            const zaszlok = document.getElementsByClassName('zaszloSzamol');
+            zaszlok[0].textContent = zaszlokSzama;
+        }
+    }
+    else
+    {
+        if(zaszlokSzama < bombakSzama){
+            ujMezo.classList.remove('zaszlo'); // Ha már van zászló, eltávolítja
+            //ujMezo.classList.add('leforditott');
+
+            palyaTomb[indexX][indexY].zaszlosE = false;
+
+            zaszlokSzama++;
+            const zaszlok = document.getElementsByClassName('zaszloSzamol');
+            zaszlok[0].textContent = zaszlokSzama;
+        }
+    }
+}
 
 
 
