@@ -2,12 +2,13 @@ let bombakSzama = 0;
 let zaszlokSzama = 0;
 let jatszikE = false;
 let elsoKattintasTortentE = false;
-let x = 2;
-let y = 2;
+let x = 9;
+let y = 9;
 let palyaTomb;
 
 
 jatekIndit();
+szintek();
 
 function tombGeneral(x, y){
     const matrix = [];
@@ -34,9 +35,6 @@ function tombGeneral(x, y){
     }
     else if(x === 16 && y === 30){
         bombakSzama = 99;
-    }
-    else if(x === 2 && y ===2){
-        bombakSzama = 1;
     }
     return matrix;
 }
@@ -124,7 +122,8 @@ function palyaFeltoltes(matrix, indexX, indexY){
 }
 
 function jatekIndit(){
-    palyaTomb = tombGeneral(x, y, 10);
+    palyaTisztitas();
+    palyaTomb = tombGeneral(x, y);
     palyaGeneral(palyaTomb);
     jatszikE = true;
     zaszloKezdoAllapot();
@@ -176,7 +175,6 @@ function mezoKeszito(x, y, mezo){
         if(mezo.bombaE){
             ujMezo.classList.add('bomba');
             bombaKattint(indexX, indexY);
-            console.log('BUMMM');
         }
         else if(mezo.mezokErteke !== 0){
             ujMezo.classList.add('szam');
@@ -316,5 +314,51 @@ function zaszloSzamlalo(csokkentsukE, indexX, indexY){
     }
 }
 
+function uresKattint(x, y){
+    
+    
+}
 
+function szintek(){
+    const kezdo = document.getElementById('kezdo');
+    kezdo.addEventListener('click', (event)=>{
+        x = 9;
+        y = 9;
+        jatekIndit();
+    })
+
+    const halado = document.getElementById('halado');
+    halado.addEventListener('click', (event)=>{
+        x = 16;
+        y = 16;
+        jatekIndit();
+    })
+
+    const szakerto = document.getElementById('szakerto');
+    szakerto.addEventListener('click', (event)=>{
+        x = 16;
+        y = 30;
+        jatekIndit();
+    })
+}
+
+function palyaTisztitas(){
+    bombakSzama = 0;
+    zaszlokSzama = 0;
+    jatszikE = false;
+    elsoKattintasTortentE = false;
+    palyaTomb = [];
+    const zaszlok = document.getElementsByClassName('zaszloSzamol');
+    if(zaszlok && zaszlok.length > 0){
+        zaszlok[0].remove();
+    }
+    const vesztettel = document.getElementsByClassName('vesztettel');
+    if(vesztettel && vesztettel.length > 0){
+        vesztettel[0].remove();
+    }
+    const nyertel = document.getElementsByClassName('nyertel');
+    if(nyertel && nyertel.length > 0){
+        nyertel[0].remove();
+    }
+}
 
