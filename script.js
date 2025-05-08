@@ -135,9 +135,8 @@ function palyaGeneral(matrix){
     jatekTabla.innerHTML = '';
 
     jatekTabla.style.display = 'grid';
-    jatekTabla.style.gridTemplateRows = `repeat(${matrix.length}, 30px)`; // Sorok számának dinamikus beállítása
-    jatekTabla.style.gridTemplateColumns = `repeat(${matrix[0].length}, 30px)`; // Oszlopok számának dinamikus beállítása
-    jatekTabla.style.border = '2px solid black';
+    jatekTabla.style.gridTemplateRows = `repeat(${matrix.length}, 40px)`; // Sorok számának dinamikus beállítása
+    jatekTabla.style.gridTemplateColumns = `repeat(${matrix[0].length}, 40px)`; // Oszlopok számának dinamikus beállítása
     jatekTabla.style.width = '100%';
     jatekTabla.style.height = '100%';
     for(let i = 0; i < matrix.length; i++){
@@ -151,11 +150,14 @@ function palyaGeneral(matrix){
 }
 
 function mezoKeszito(x, y, mezo){
+    const kontenerDiv = document.createElement('div');
+    kontenerDiv.classList.add('mezo-kontener'); // új köztes div
+
     const ujMezo = document.createElement('div');//mezok hozzáadása
     ujMezo.dataset.indexX = x.toString();
     ujMezo.dataset.indexY = y.toString();
     ujMezo.classList.add('mezok');
-    ujMezo.style.border = '2px solid black';
+    
     if(!mezo.felforditottE){
         ujMezo.classList.add('leforditott');
     }
@@ -218,7 +220,8 @@ function mezoKeszito(x, y, mezo){
             }
         }
     })
-    return ujMezo;
+    kontenerDiv.appendChild(ujMezo);
+    return kontenerDiv;
 }
 
 function bombaKattint(x, y){

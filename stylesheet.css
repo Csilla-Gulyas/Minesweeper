@@ -9,7 +9,108 @@ body{
     flex-direction: column;
     justify-content: start;
     align-items: center;
+    background-image: url('hatterKepUj.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
   }
+
+@font-face {
+    font-family: 'MyFont';
+    src: url('MyFont.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.focim{
+    font-family: 'Audiowide', sans-serif;
+    font-size: 100px;
+    color: #ff00c8;
+    text-shadow: 0 0 5px #ff00c8, 0 0 10px #ff00c8, 0 0 20px #ff00c8;
+}
+
+#tablaFelett{
+    width: 380px;
+}
+
+.jatek-tabla-tarolo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    background-color: #06172a;
+    padding: 10px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #00ffff;
+    border-radius: 5px;
+}
+
+.tabla{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #00ffff;
+    /* box-shadow:
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    0 0 40px rgba(0, 255, 255, 0.4);
+    transition: box-shadow 0.2s ease; */
+    align-items: center;
+    justify-items: center;
+}
+
+/* .tabla:hover {
+    box-shadow:
+      0 0 8px #00ffff,
+      0 0 16px #00ffff,
+      0 0 32px #00ffff,
+      0 0 64px rgba(0, 255, 255, 0.6);
+    cursor: pointer;
+} */
+
+.mezo-kontener {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #00ffff;
+    /* border-color: #84b9dd; */
+    /* box-shadow: 0px 0px 150px 5px rgba(45,255,196,0.2); */
+    box-shadow: 0px 0px 150px 2px #00ffff;
+    /* box-shadow: 0px 0px 150px 2px #84b9dd; */
+  }
+
+.mezok{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #00ffff;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+.leforditott{
+    background-color: #06172a;
+}
+
+.szam{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ff00c8;
+    text-shadow: 0px 0px 150px 50px #ff00c8;
+    font-weight: bold;
+    font-family: 'Audiowide', cursive;
+    /* font-family: 'Orbitron', sans-serif; */
+}
 
 .bomba{
     background-image: url("./bomb.png");
@@ -32,26 +133,11 @@ body{
     background-position: center;
 }
 
-.leforditott{
-    background-color: grey;
-}
-
 #szintValaszto{
     display: none;
     position: absolute;
     width: 100%;
     height: 100%;
-}
-
-.jatek-tabla-tarolo{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-}
-
-.nav-sav{
-    
 }
 
 #tablaFelett{
