@@ -7,16 +7,37 @@
     <title>Minesweeper</title>
 </head>
 <body>
+    <div>Aknakereső</div>
     <div class="nav-sav">
-        <button id="kezdo">Kezdő</button>
-        <button id="halado">Haladó</button>
-        <button id="szakerto">Szakértő</button>
+        <button id="szintValasztoGomb">Szint választása</button>
+    </div>
+    <div id="szintValaszto">
+        <div id="szintek">
+            <button id="kezdo" disabled>Kezdő</button>
+            <button id="halado">Haladó</button>
+            <button id="szakerto">Szakértő</button>
+        </div>
     </div>
     <div id="tablaFelett">
-        
+        <div class="zaszlo-kepe"></div>
+        <div class="emoji">
+            <button id="emojiGomb">::</button>
+        </div>
+        <div id="szamlalo">00:00</div>
+        <div class="szamlalo-gomb">
+            <button id="szamlaloGomb">pause</button>
+        </div>
     </div>
-   <div id="jatekTabla">
-
-   </div> 
+    <div class="jatek-tabla-tarolo">
+        <div id="jatekTabla"></div>
+    </div>
+    <div class="zene-lejatszas">
+        <audio id="zene">
+            <source src="zene.m4a" type="audio/ogg"> <!--ide kéne zene-->
+            <source src="zene.m4a" type="audio/mpeg">
+        </audio>
+        <button id="lejatszas" type="button" hidden>Play</button>
+        <button id="megallitas" type="button">Pause</button> 
+    </div>
 </body>
 </html>

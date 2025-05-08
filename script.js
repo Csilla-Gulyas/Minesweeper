@@ -5,8 +5,9 @@ let elsoKattintasTortentE = false;
 let x = 9;
 let y = 9;
 let palyaTomb;
+let zene;
 
-
+zeneInicializalas();
 jatekIndit();
 szintek();
 
@@ -75,35 +76,35 @@ function palyaFeltoltes(matrix, indexX, indexY){
         for(let j = 0; j < matrix[i].length; j++){
             if(matrix[i] [j].bombaE){//a bomba mezőket járja körbe és növeli az értékét
                 //bal felső mező
-                if(i - 1 >= 0 && i - 1 < matrix[i].length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i - 1] [j - 1].bombaE){
+                if(i - 1 >= 0 && i - 1 < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i - 1] [j - 1].bombaE){
                     matrix[i - 1] [j - 1].mezokErteke++;
                 }
                 //felső mező
-                if(i - 1 >= 0 && i - 1 < matrix[i].length && j >= 0 && j < matrix[i].length && !matrix[i - 1] [j].bombaE){
+                if(i - 1 >= 0 && i - 1 < matrix.length && j >= 0 && j < matrix[i].length && !matrix[i - 1] [j].bombaE){
                     matrix[i - 1] [j].mezokErteke++;
                 }
                  //jobb felső mező
-                 if(i - 1 >= 0 && i - 1 < matrix[i].length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i - 1] [j + 1].bombaE){
+                 if(i - 1 >= 0 && i - 1 < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i - 1] [j + 1].bombaE){
                     matrix[i - 1] [j + 1].mezokErteke++;
                 }
                 //job oldali mező
-                if(i >= 0 && i < matrix[i].length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i] [j + 1].bombaE){
+                if(i >= 0 && i < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i] [j + 1].bombaE){
                     matrix[i] [j + 1].mezokErteke++;
                 }
                 //jobb alsó mező
-                if(i + 1 >= 0 && i + 1 < matrix[i].length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i + 1] [j + 1].bombaE){//azt vizsgáljuk-e, hogy bomba, mert akkor nem kell az értékét növelni
+                if(i + 1 >= 0 && i + 1 < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i + 1] [j + 1].bombaE){
                     matrix[i + 1] [j + 1].mezokErteke++;
                 }
                 //alsó mező
-                if(i + 1 >= 0 && i + 1 < matrix[i].length && j >= 0 && j < matrix[i].length && !matrix[i + 1] [j].bombaE){
+                if(i + 1 >= 0 && i + 1 < matrix.length && j >= 0 && j < matrix[i].length && !matrix[i + 1] [j].bombaE){
                     matrix[i + 1] [j].mezokErteke++;
                 }
                 //bal alsó mező
-                if(i + 1 >= 0 && i + 1 < matrix[i].length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i + 1] [j - 1].bombaE){
+                if(i + 1 >= 0 && i + 1 < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i + 1] [j - 1].bombaE){
                     matrix[i + 1] [j - 1].mezokErteke++;
                 }
                 //bal oldali mező
-                if(i >= 0 && i < matrix[i].length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i] [j - 1].bombaE){
+                if(i >= 0 && i < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i] [j - 1].bombaE){
                     matrix[i] [j - 1].mezokErteke++;
                 }
             }
@@ -134,9 +135,11 @@ function palyaGeneral(matrix){
     jatekTabla.innerHTML = '';
 
     jatekTabla.style.display = 'grid';
-    jatekTabla.style.gridTemplateRows = `repeat(${matrix.length}, 30px)`;//sorok száma dinamikusan
-    jatekTabla.style.gridTemplateColumns = `repeat(${matrix[0].length}, 30px)`;//oszlopok száma dinamikusan
+    jatekTabla.style.gridTemplateRows = `repeat(${matrix.length}, 30px)`; // Sorok számának dinamikus beállítása
+    jatekTabla.style.gridTemplateColumns = `repeat(${matrix[0].length}, 30px)`; // Oszlopok számának dinamikus beállítása
     jatekTabla.style.border = '2px solid black';
+    jatekTabla.style.width = '100%';
+    jatekTabla.style.height = '100%';
     for(let i = 0; i < matrix.length; i++){
         for(let j = 0; j < matrix[i].length; j++){
             const matrixAktualisEleme = matrix[i] [j];
@@ -171,6 +174,7 @@ function mezoKeszito(x, y, mezo){
         if(!elsoKattintasTortentE){
             palyaTomb = palyaFeltoltes(palyaTomb, indexX, indexY)
             elsoKattintasTortentE = true;
+            zeneLejatszas();
         }
         if(mezo.bombaE){
             ujMezo.classList.add('bomba');
@@ -182,8 +186,8 @@ function mezoKeszito(x, y, mezo){
             nyert();
         }
         else{
-            ujMezo.classList.add('ures');
-            uresKattint(indexX, indexY);
+            //ujMezo.classList.add('ures');
+            //uresKattint(indexX, indexY);
             nyert();
         }
     })
@@ -195,6 +199,9 @@ function mezoKeszito(x, y, mezo){
         let csokkentsukE = true;
         if(!jatszikE){//ha nem játszik, ne működjenek az event listener-ek
             return;
+        }
+        if(!elsoKattintasTortentE){
+            zeneLejatszas();
         }
         if (!mezo.felforditottE) {
             if (!palyaTomb[indexX][indexY].zaszlosE) {
@@ -214,10 +221,6 @@ function mezoKeszito(x, y, mezo){
     return ujMezo;
 }
 
-function uresKattint(x, y){
-    console.log('ures');
-}
-
 function bombaKattint(x, y){
     jatszikE = false; //játék vége
     for(let i = 0; i < palyaTomb.length; i++){
@@ -234,6 +237,18 @@ function bombaKattint(x, y){
             }
         }
     }
+    for(let i = 0; i < palyaTomb.length; i++){
+        for(let j = 0; j < palyaTomb[i].length; j++){
+            const mezo = palyaTomb[i][j];
+            if(mezo.zaszlosE){
+                if(!mezo.bombaE){
+                    const tevesZaszlo = elementLekereseIndexekkel(i, j);
+                    tevesZaszlo.classList.add('tevesZaszlo');
+                }
+            }
+        }
+    }
+    
     const vesztettel = document.createElement('div'); //vesztés tényének kiírása egy div-be
     vesztettel.textContent = 'Vesztettél!';
     vesztettel.classList.add('vesztettel');
@@ -245,7 +260,6 @@ function elementLekereseIndexekkel(x, y){
     const elem = document.querySelector(`[data-index-x="${x}"][data-index-y="${y}"]`);
     return elem;
 }
-
 
 
 function nyert(){
@@ -283,7 +297,7 @@ function zaszloKezdoAllapot(){
     zaszlok.textContent = zaszlokSzama; //megadom az értékét
     zaszlok.classList.add('zaszloSzamol');
     const tablaFelett = document.getElementById('tablaFelett');
-    tablaFelett.appendChild(zaszlok);
+    tablaFelett.insertBefore(zaszlok, tablaFelett.children[1]);
 }
 
 function zaszloSzamlalo(csokkentsukE, indexX, indexY){
@@ -342,6 +356,33 @@ function szintek(){
     })
 }
 
+const szintValasztoGomb = document.getElementById('szintValasztoGomb');
+const szintValaszto = document.getElementById('szintValaszto');
+szintValasztoGomb.addEventListener('click', (event)=>{
+    szintValaszto.style.display = 'block';
+})//a szintválasztó gomb megnyomásával megjelennek a szintek gombjai
+
+const kezdoGomb = document.getElementById('kezdo');//ez a 3 eventlistener azt kezeli le, hogy mikor, melyik szint gombjai menjenek
+kezdoGomb.addEventListener('click', (event)=>{
+    kezdoGomb.disabled = true;
+    haladoGomb.disabled = false;
+    szakertoGomb.disabled = false;
+})
+
+const haladoGomb = document.getElementById('halado');
+haladoGomb.addEventListener('click', (event)=>{
+    haladoGomb.disabled = true;
+    kezdoGomb.disabled = false;
+    szakertoGomb.disabled = false;
+})
+
+const szakertoGomb = document.getElementById('szakerto');
+szakertoGomb.addEventListener('click', (event)=>{
+    szakertoGomb.disabled = true;
+    haladoGomb.disabled = false;
+    kezdoGomb.disabled = false;
+})
+
 function palyaTisztitas(){
     bombakSzama = 0;
     zaszlokSzama = 0;
@@ -360,5 +401,42 @@ function palyaTisztitas(){
     if(nyertel && nyertel.length > 0){
         nyertel[0].remove();
     }
+}
+
+
+
+let perc = 0;
+let masodperc = 0;
+
+function idozito() {
+  
+}
+
+function zeneLejatszas() { 
+  zene.play(); 
+} 
+
+function zeneMegallitas() { 
+  zene.pause(); 
+} 
+
+function zeneInicializalas(){
+    zene = document.getElementById("zene"); 
+    zene.loop = true;
+
+    const lejatszasGomb = document.getElementById('lejatszas');
+    const megallitasGomb = document.getElementById('megallitas');
+
+    lejatszasGomb.addEventListener('click', (event)=>{
+        zeneLejatszas();
+        lejatszasGomb.hidden = true;
+        megallitasGomb.hidden = false;
+    })
+
+    megallitasGomb.addEventListener('click', (event)=>{
+        zeneMegallitas();
+        megallitasGomb.hidden = true;
+        lejatszasGomb.hidden = false;
+    })
 }
 

@@ -1,3 +1,16 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+
 .bomba{
     background-image: url("./bomb.png");
     background-size: contain;
@@ -21,4 +34,41 @@
 
 .leforditott{
     background-color: grey;
+}
+
+#szintValaszto{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.jatek-tabla-tarolo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.nav-sav{
+    
+}
+
+#tablaFelett{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/* #lejatszas, #megallitas{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+} */
+
+.tevesZaszlo{
+    background-color: blueviolet;
 }
