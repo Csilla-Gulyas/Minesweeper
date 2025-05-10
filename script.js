@@ -230,11 +230,14 @@ function bombaKattint(x, y){
             const mezo = palyaTomb[i][j];
             if(mezo.bombaE){
                 const elem = elementLekereseIndexekkel(i, j);
-                //TODO: lekezelni, ha fel van fordítva
-                elem.classList.remove('leforditott');
-                elem.classList.add('bomba');
-                if(i == x && j == y){
-                    elem.classList.add('aBomba'); //az a bomba amire először kattintottunk, így külön lehet formázni
+                if (!mezo.zaszlosE){
+                    //TODO: lekezelni, ha fel van fordítva
+                    elem.classList.remove('leforditott');
+                    elem.classList.add('bomba');
+                    if(i == x && j == y){
+                        elem.classList.add('aBomba'); //az a bomba amire először kattintottunk, így külön lehet formázni
+                        elem.classList.remove('bomba');
+                    }
                 }
             }
         }
@@ -298,8 +301,8 @@ function zaszloKezdoAllapot(){
     const zaszlok = document.createElement('div'); //zaszló számláló div
     zaszlok.textContent = zaszlokSzama; //megadom az értékét
     zaszlok.classList.add('zaszloSzamol');
-    const tablaFelett = document.getElementById('tablaFelett');
-    tablaFelett.insertBefore(zaszlok, tablaFelett.children[1]);
+    const zaszloTarolo = document.getElementsByClassName('zaszlo-tarolo')[0];
+    zaszloTarolo.insertBefore(zaszlok, zaszloTarolo.children[1]);
 }
 
 function zaszloSzamlalo(csokkentsukE, indexX, indexY){
@@ -367,8 +370,8 @@ function uresKattintKornyezoMezok(x, y) {
 function felfed(x, y) {
     let palyaAktEleme = palyaTomb[x][y];
 
-    // ha bomba nem fut tovább a metódus
-    if (palyaAktEleme.bombaE) {
+    // ha bomba, vagy zászló nem fut tovább a metódus
+    if (palyaAktEleme.bombaE || palyaAktEleme.zaszlosE) {
         return;
     }
 
@@ -389,49 +392,49 @@ function kornyezoMezokLekerese(x,y, matrix) {
     let kornyezoMezok = [];
 
     //bal felső mező
-    if(x - 1 >= 0 && x - 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x - 1] [y - 1].bombaE && !matrix[x - 1] [y - 1].bombaE.felforditottE){
+    if(x - 1 >= 0 && x - 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x - 1] [y - 1].bombaE && !matrix[x - 1] [y - 1].bombaE.felforditottE && !matrix[x - 1] [y - 1].bombaE.zaszlosE){
         kornyezoMezok.push({
             x: x - 1, y: y - 1
         });
     }
     //felső mező
-    if(x - 1 >= 0 && x - 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x - 1] [y].bombaE && !matrix[x - 1] [y].felforditottE){
+    if(x - 1 >= 0 && x - 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x - 1] [y].bombaE && !matrix[x - 1] [y].felforditottE && !matrix[x - 1] [y].zaszlosE){
         kornyezoMezok.push({
             x: x - 1, y: y
         });
     }
     //jobb felső mező
-    if(x - 1 >= 0 && x - 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x - 1] [y + 1].bombaE && !matrix[x - 1] [y + 1].felforditottE){
+    if(x - 1 >= 0 && x - 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x - 1] [y + 1].bombaE && !matrix[x - 1] [y + 1].felforditottE && !matrix[x - 1] [y + 1].zaszlosE){
         kornyezoMezok.push({
             x: x - 1, y: y + 1
         });
     }
     //job oldali mező
-    if(x >= 0 && x < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x] [y + 1].bombaE && !matrix[x] [y + 1].felforditottE){
+    if(x >= 0 && x < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x] [y + 1].bombaE && !matrix[x] [y + 1].felforditottE && !matrix[x] [y + 1].zaszlosE){
         kornyezoMezok.push({
             x: x, y: y + 1
         });
     }
     //jobb alsó mező
-    if(x + 1 >= 0 && x + 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x + 1] [y + 1].bombaE && !matrix[x + 1] [y + 1].felforditottE){
+    if(x + 1 >= 0 && x + 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x + 1] [y + 1].bombaE && !matrix[x + 1] [y + 1].felforditottE && !matrix[x + 1] [y + 1].zaszlosE){
         kornyezoMezok.push({
             x: x + 1, y: y + 1
         });
     }
     //alsó mező
-    if(x + 1 >= 0 && x + 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x + 1] [y].bombaE && !matrix[x + 1] [y].felforditottE){
+    if(x + 1 >= 0 && x + 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x + 1] [y].bombaE && !matrix[x + 1] [y].felforditottE && !matrix[x + 1] [y].zaszlosE){
         kornyezoMezok.push({
             x: x + 1, y: y
         });
     }
     //bal alsó mező
-    if(x + 1 >= 0 && x + 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x + 1] [y - 1].bombaE && !matrix[x + 1] [y - 1].felforditottE){
+    if(x + 1 >= 0 && x + 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x + 1] [y - 1].bombaE && !matrix[x + 1] [y - 1].felforditottE && !matrix[x + 1] [y - 1].zaszlosE){
         kornyezoMezok.push({
             x: x + 1, y: y - 1
         });
     }
     //bal oldali mező
-    if(x >= 0 && x < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x] [y - 1].bombaE && !matrix[x] [y - 1].felforditottE){
+    if(x >= 0 && x < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x] [y - 1].bombaE && !matrix[x] [y - 1].felforditottE && !matrix[x] [y - 1].zaszlosE){
         kornyezoMezok.push({
             x: x, y: y - 1
         });

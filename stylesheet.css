@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Audiowide', sans-serif;
 }
 
 body{
@@ -9,7 +10,7 @@ body{
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    background-image: url('hatterKepUj.jpeg');
+    background-image: url('hatter.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -23,15 +24,130 @@ body{
     font-style: normal;
 }
 
+
+
 .focim{
     font-family: 'Audiowide', sans-serif;
     font-size: 100px;
-    color: #ff00c8;
-    text-shadow: 0 0 5px #ff00c8, 0 0 10px #ff00c8, 0 0 20px #ff00c8;
+    color: #da2784;
+    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6)
+    , 0 0 60px rgba(218, 39, 132, 0.6)
+    , 0 0 120px rgba(218, 39, 132, 0.6);
 }
 
-#tablaFelett{
-    width: 380px;
+.fo-tarolo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.nav-sav {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 12px 0;
+    border-top: 2px solid #00ffff;
+    border-bottom: 2px solid #00ffff;
+}
+
+.nav-sav button {
+    background: none;
+    border: none;
+
+    font-size: 16px;
+    cursor: pointer;
+
+    color: #da2784;
+    text-shadow: 0 0 30px rgba(218, 39, 132, 1)
+    , 0 0 60px rgba(218, 39, 132, 1)
+    , 0 0 120px rgba(218, 39, 132, 1);
+}
+
+#tablaFelett, .tabla-alatt{
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 0;
+    width: 100%;
+    max-width: 400px;
+}
+
+.tabla-alatt{
+    align-items: start;
+}
+
+.ures-tabla-alatt {
+    width: 100px;
+    height: 44px;
+}
+
+.zaszlo-tarolo, .szamlalo-gomb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 20px;
+    width: 115px;
+}
+
+.zaszlo-kepe {
+    width: 20px;
+    height: 20px;
+    filter: invert(84%) sepia(96%) saturate(7500%) hue-rotate(104deg) brightness(103%) contrast(102%)
+    drop-shadow(0 0 1px rgba(0, 255, 255, 0.9)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.8)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
+    border-width: 0;
+}
+
+.zaszloSzamol, #szamlalo {
+    color: rgba(218, 39, 132, 1);
+    text-shadow: 0 0 20px rgba(218, 39, 132, 1)
+    , 0 0 50px rgba(218, 39, 132, 1)
+    , 0 0 110px rgba(218, 39, 132, 1);
+}
+
+#szamlaloGomb {
+    background: none;
+    border: none;
+}
+
+#szamlaloGomb i {
+    font-size: 20px;
+    color: #00ffff;
+}
+
+#emojiGomb {
+    background: none;
+    border: none;
+}
+
+#emojiGomb i {
+    font-size: 50px;
+    color: #00ffff;
+}
+
+.border {
+    background-color: #033237;
+    padding: 10px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #00ffff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 0.6);
+
+}
+
+.border-1 {
+    background-color: #033237;
+    padding: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #00ffff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 100px 0px rgba(0, 255, 255, 0.6);
+
 }
 
 .jatek-tabla-tarolo{
@@ -39,7 +155,7 @@ body{
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    background-color: #06172a;
+    background-color: #033237;
     padding: 10px;
     border-style: solid;
     border-width: 3px;
@@ -81,7 +197,7 @@ body{
     border-color: #00ffff;
     /* border-color: #84b9dd; */
     /* box-shadow: 0px 0px 150px 5px rgba(45,255,196,0.2); */
-    box-shadow: 0px 0px 150px 2px #00ffff;
+    box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 0.6);
     /* box-shadow: 0px 0px 150px 2px #84b9dd; */
   }
 
@@ -98,39 +214,52 @@ body{
 }
 
 .leforditott{
-    background-color: #06172a;
+    background-color: rgba(6, 23, 42, 1);
 }
 
 .szam{
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #ff00c8;
-    text-shadow: 0px 0px 150px 50px #ff00c8;
+    color: #da2784;
+    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6)
+    , 0 0 60px rgba(218, 39, 132, 0.6)
+    , 0 0 120px rgba(218, 39, 132, 0.6);
     font-weight: bold;
     font-family: 'Audiowide', cursive;
     /* font-family: 'Orbitron', sans-serif; */
 }
 
 .bomba{
-    background-image: url("./bomb.png");
+    background-image: url("./akna.svg");
+    filter: invert(54%) sepia(79%) saturate(423%) hue-rotate(341deg) brightness(89%) contrast(94%)
+drop-shadow(0 0 1px rgb(221, 126, 59, 0.9)) drop-shadow(0 0 2px rgba(221, 126, 59, 0.8)) drop-shadow(0 0 3px rgba(221, 126, 59, 0.6));
+    border-width: 0;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .aBomba{
-    background-image: url("./piros_bomba.png");
+    background-image: url("./akna.svg");
+    /*e8071a*/
+    filter: invert(24%) sepia(84%) saturate(4788%) hue-rotate(340deg) brightness(81%) contrast(132%)
+    drop-shadow(0 0 1px rgba(232, 7, 26, 0.9)) drop-shadow(0 0 2px rgba(232, 7, 26, 0.8)) drop-shadow(0 0 3px rgba(232, 7, 26, 0.6));
+    border-width: 0;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .zaszlo{
-    background-image: url("./flag.png");
+    background-image: url("./zaszlo.png");
+    background-color: transparent;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    filter: invert(84%) sepia(96%) saturate(7500%) hue-rotate(104deg) brightness(103%) contrast(102%)
+            drop-shadow(0 0 1px rgba(0, 255, 255, 0.9)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.8)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
+    border-width: 0;
 }
 
 #szintValaszto{
@@ -138,13 +267,6 @@ body{
     position: absolute;
     width: 100%;
     height: 100%;
-}
-
-#tablaFelett{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
 }
 
 /* #lejatszas, #megallitas{
@@ -156,5 +278,18 @@ body{
 } */
 
 .tevesZaszlo{
-    background-color: blueviolet;
+    filter: invert(10%) sepia(94%) saturate(7075%) hue-rotate(352deg) brightness(92%) contrast(98%)
+    drop-shadow(0 0 1px rgba(232, 7, 26, 0.9)) drop-shadow(0 0 2px rgba(232, 7, 26, 0.8)) drop-shadow(0 0 3px rgba(232, 7, 26, 0.6));
+}
+
+.zene-lejatszas {
+    width: 130px;
+    height: auto;
+}
+
+.zene-lejatszas img {
+    width: 100%;
+    filter: invert(84%) sepia(96%) saturate(7500%) hue-rotate(104deg) brightness(103%) contrast(102%)
+    drop-shadow(0 0 1px rgba(0, 255, 255, 0.5)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.4)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
+
 }
