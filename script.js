@@ -188,9 +188,8 @@ function mezoKeszito(x, y, mezo){
             nyert();
         }
         else{
-            //ujMezo.classList.add('ures');
-            //uresKattint(indexX, indexY);
-            nyert();
+            mezo.felforditottE = false;
+            uresKattint(indexX, indexY);
         }
     })
 
@@ -332,8 +331,113 @@ function zaszloSzamlalo(csokkentsukE, indexX, indexY){
 }
 
 function uresKattint(x, y){
-    
-    
+    let ellenorizendoElemek = [];
+    ellenorizendoElemek.push({x, y});
+
+    for (let i = 0; i < ellenorizendoElemek.length; i++) {
+        const aktElem = ellenorizendoElemek[i];
+        let ujElemek = uresKattintKornyezoMezok(aktElem.x,  aktElem.y);
+        ellenorizendoElemek.push(...ujElemek);
+    }
+
+    nyert();
+}
+
+function uresKattintKornyezoMezok(x, y) {
+    let ujEllenorizendoElemek = [];
+
+    if(palyaTomb[x][y].felforditottE){
+        return ujEllenorizendoElemek;
+    }
+    else if (palyaTomb[x][y].bombaE){
+        return ujEllenorizendoElemek;
+    }
+    else if(palyaTomb[x][y].mezokErteke > 0 && palyaTomb[x][y].mezokErteke < 9){
+        felfed(x, y);
+        return ujEllenorizendoElemek;
+    }
+    else{
+        felfed(x, y);
+        ujEllenorizendoElemek = kornyezoMezokLekerese(x,y, palyaTomb);
+    }
+
+    return ujEllenorizendoElemek;
+}
+
+function felfed(x, y) {
+    let palyaAktEleme = palyaTomb[x][y];
+
+    // ha bomba nem fut tovább a metódus
+    if (palyaAktEleme.bombaE) {
+        return;
+    }
+
+    const mezo = elementLekereseIndexekkel(x, y);
+
+    if (palyaAktEleme.mezokErteke !== 0) {
+        mezo.classList.add('szam');
+        mezo.innerText = palyaAktEleme.mezokErteke;
+    } else {
+        mezo.classList.add('ures');
+    }
+
+    mezo.classList.remove('leforditott')
+    palyaAktEleme.felforditottE = true;
+}
+
+function kornyezoMezokLekerese(x,y, matrix) {
+    let kornyezoMezok = [];
+
+    //bal felső mező
+    if(x - 1 >= 0 && x - 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x - 1] [y - 1].bombaE && !matrix[x - 1] [y - 1].bombaE.felforditottE){
+        kornyezoMezok.push({
+            x: x - 1, y: y - 1
+        });
+    }
+    //felső mező
+    if(x - 1 >= 0 && x - 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x - 1] [y].bombaE && !matrix[x - 1] [y].felforditottE){
+        kornyezoMezok.push({
+            x: x - 1, y: y
+        });
+    }
+    //jobb felső mező
+    if(x - 1 >= 0 && x - 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x - 1] [y + 1].bombaE && !matrix[x - 1] [y + 1].felforditottE){
+        kornyezoMezok.push({
+            x: x - 1, y: y + 1
+        });
+    }
+    //job oldali mező
+    if(x >= 0 && x < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x] [y + 1].bombaE && !matrix[x] [y + 1].felforditottE){
+        kornyezoMezok.push({
+            x: x, y: y + 1
+        });
+    }
+    //jobb alsó mező
+    if(x + 1 >= 0 && x + 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x + 1] [y + 1].bombaE && !matrix[x + 1] [y + 1].felforditottE){
+        kornyezoMezok.push({
+            x: x + 1, y: y + 1
+        });
+    }
+    //alsó mező
+    if(x + 1 >= 0 && x + 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x + 1] [y].bombaE && !matrix[x + 1] [y].felforditottE){
+        kornyezoMezok.push({
+            x: x + 1, y: y
+        });
+    }
+    //bal alsó mező
+    if(x + 1 >= 0 && x + 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x + 1] [y - 1].bombaE && !matrix[x + 1] [y - 1].felforditottE){
+        kornyezoMezok.push({
+            x: x + 1, y: y - 1
+        });
+    }
+    //bal oldali mező
+    if(x >= 0 && x < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x] [y - 1].bombaE && !matrix[x] [y - 1].felforditottE){
+        kornyezoMezok.push({
+            x: x, y: y - 1
+        });
+    }
+
+    return kornyezoMezok;
 }
 
 function szintek(){
