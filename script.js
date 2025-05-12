@@ -6,6 +6,8 @@ let x = 9;
 let y = 9;
 let palyaTomb;
 let zene;
+let zeneFolyamatbanVanE = false;
+let intervallum;
 
 zeneInicializalas();
 jatekIndit();
@@ -177,6 +179,7 @@ function mezoKeszito(x, y, mezo){
             palyaTomb = palyaFeltoltes(palyaTomb, indexX, indexY)
             elsoKattintasTortentE = true;
             zeneLejatszas();
+            idozito();
         }
         if(mezo.bombaE){
             ujMezo.classList.add('bomba');
@@ -203,6 +206,7 @@ function mezoKeszito(x, y, mezo){
         }
         if(!elsoKattintasTortentE){
             zeneLejatszas();
+            idozito();
         }
         if (!mezo.felforditottE) {
             if (!palyaTomb[indexX][indexY].zaszlosE) {
@@ -468,8 +472,11 @@ function szintek(){
 
 const szintValasztoGomb = document.getElementById('szintValasztoGomb');
 const szintValaszto = document.getElementById('szintValaszto');
+const foTarolo = document.getElementById('foTarolo');
+
 szintValasztoGomb.addEventListener('click', (event)=>{
-    szintValaszto.style.display = 'block';
+    szintValaszto.style.display = 'flex';
+    foTarolo.style.display = 'none';
 })//a szintválasztó gomb megnyomásával megjelennek a szintek gombjai
 
 const kezdoGomb = document.getElementById('kezdo');//ez a 3 eventlistener azt kezeli le, hogy mikor, melyik szint gombjai menjenek
@@ -477,6 +484,8 @@ kezdoGomb.addEventListener('click', (event)=>{
     kezdoGomb.disabled = true;
     haladoGomb.disabled = false;
     szakertoGomb.disabled = false;
+    szintValaszto.style.display = 'none';
+    foTarolo.style.display = 'flex';
 })
 
 const haladoGomb = document.getElementById('halado');
@@ -484,6 +493,8 @@ haladoGomb.addEventListener('click', (event)=>{
     haladoGomb.disabled = true;
     kezdoGomb.disabled = false;
     szakertoGomb.disabled = false;
+    szintValaszto.style.display = 'none';
+    foTarolo.style.display = 'flex';
 })
 
 const szakertoGomb = document.getElementById('szakerto');
@@ -491,6 +502,14 @@ szakertoGomb.addEventListener('click', (event)=>{
     szakertoGomb.disabled = true;
     haladoGomb.disabled = false;
     kezdoGomb.disabled = false;
+    szintValaszto.style.display = 'none';
+    foTarolo.style.display = 'flex';
+})
+
+const szintekBezaras = document.getElementById('szintekBezaras');
+szintekBezaras.addEventListener('click', (event)=>{
+    szintValaszto.style.display = 'none';
+    foTarolo.style.display = 'flex';
 })
 
 function palyaTisztitas(){
@@ -513,40 +532,56 @@ function palyaTisztitas(){
     }
 }
 
-
-
-let perc = 0;
-let masodperc = 0;
-
 function idozito() {
-  
+    if (intervallum) {
+        clearInterval(intervallum);
+    }
+
+    const kezdoIdo = Date.now();
+
+    intervallum = setInterval(function() {
+        const elteltEzredMasodpercek = Date.now() - kezdoIdo;
+        const elteltMasodpercek = Math.floor(elteltEzredMasodpercek / 1000);
+
+        let masodpercek = elteltMasodpercek % 60;
+        let percek = (elteltMasodpercek - masodpercek)/60;
+
+        if (masodpercek < 10) {
+            masodpercek = "0" + masodpercek;
+        }
+
+        if (percek < 10) {
+            percek = "0" + percek;
+        }
+
+        const szamlalo = document.getElementById('szamlalo');
+        szamlalo.textContent = `${percek}:${masodpercek}`;
+
+    }, 100)
 }
 
 function zeneLejatszas() { 
-  zene.play(); 
+  zene.play();
+  zeneFolyamatbanVanE = true;
 } 
 
 function zeneMegallitas() { 
-  zene.pause(); 
+  zene.pause();
+  zeneFolyamatbanVanE = false;
 } 
 
 function zeneInicializalas(){
     zene = document.getElementById("zene"); 
     zene.loop = true;
 
-    const lejatszasGomb = document.getElementById('lejatszas');
-    const megallitasGomb = document.getElementById('megallitas');
+    const zeneGomb = document.getElementById('zeneGomb');
 
-    lejatszasGomb.addEventListener('click', (event)=>{
-        zeneLejatszas();
-        lejatszasGomb.hidden = true;
-        megallitasGomb.hidden = false;
-    })
-
-    megallitasGomb.addEventListener('click', (event)=>{
-        zeneMegallitas();
-        megallitasGomb.hidden = true;
-        lejatszasGomb.hidden = false;
+    zeneGomb.addEventListener('click', (event)=>{
+        if (zeneFolyamatbanVanE) {
+            zeneMegallitas();
+        } else {
+            zeneLejatszas();
+        }
     })
 }
 

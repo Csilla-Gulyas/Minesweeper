@@ -5,24 +5,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
     <link rel="stylesheet" href="stylesheet.css">
     <script src="script.js" defer></script>
     <title>Minesweeper</title>
 </head>
 <body>
     <div class="focim">Aknakereső</div>
-    <div class="fo-tarolo">
-        <div class="nav-sav">
-            <button id="szintValasztoGomb">Szint választása</button>
-            <button id="jatekSzabalyzat">Játék szabályzat</button>
-        </div>
-        <div id="szintValaszto">
-            <div id="szintek">
+    <div id="szintValaszto">
+        <div id="szintek">
+            <div class="szintek-bezaras-tarolo">
+                <button id="szintekBezaras" class="szintek-bezaras">
+                    <i class="fa-regular fa-xmark"></i>
+                </button>
+            </div>
+            <div class="szintek-gombok-tarolo">
                 <button id="kezdo" disabled>Kezdő</button>
                 <button id="halado">Haladó</button>
                 <button id="szakerto">Szakértő</button>
             </div>
+        </div>
+    </div>
+    <div id="foTarolo" class="fo-tarolo">
+        <div class="nav-sav">
+            <button id="szintValasztoGomb">Szint választása</button>
+            <button id="jatekSzabalyzat">Játék szabályzat</button>
         </div>
         <div id="tablaFelett">
             <div class="border">
@@ -33,16 +40,16 @@
             <div class="border">
                 <div class="border-1 emoji">
                     <button id="emojiGomb">
-                        <i class="fa-regular fa-face-tired"></i>
+                        <i class="fa-thin fa-face-tired"></i>
                     </button>
                 </div>
             </div>
             <div class="border">
                 <div class="border-1 szamlalo-gomb">
                     <div id="szamlalo">00:00</div>
-                    <button id="szamlaloGomb">
-                        <i class="fa-solid fa-play"></i>
-                    </button>
+<!--                    <button id="szamlaloGomb">-->
+<!--                        <i class="fa-solid fa-play"></i>-->
+<!--                    </button>-->
                 </div>
             </div>
         </div>
@@ -59,9 +66,7 @@
                     <source src="zene.m4a" type="audio/ogg">
                     <source src="zene.m4a" type="audio/mpeg">
                 </audio>
-                <img src="kazetta.svg" alt="">
-                <button id="lejatszas" type="button" hidden>Play</button>
-                <button id="megallitas" type="button" hidden>Pause</button>
+                <img id="zeneGomb" src="kazetta.svg" alt="Kazetta">
             </div>
             <div class="border">
                 <div class="border-1 ures-tabla-alatt">
