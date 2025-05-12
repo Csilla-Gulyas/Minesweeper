@@ -10,8 +10,9 @@ let zeneFolyamatbanVanE = false;
 let intervallum;
 
 zeneInicializalas();
-jatekIndit();
 szintek();
+emojiInicializalas();
+jatekIndit();
 
 function tombGeneral(x, y){
     const matrix = [];
@@ -125,6 +126,8 @@ function palyaFeltoltes(matrix, indexX, indexY){
 }
 
 function jatekIndit(){
+    emojiArcBeallitas('fa-face-smile');
+    idozitoNullazas();
     palyaTisztitas();
     palyaTomb = tombGeneral(x, y);
     palyaGeneral(palyaTomb);
@@ -263,6 +266,8 @@ function bombaKattint(x, y){
     vesztettel.classList.add('vesztettel');
     vesztettel.classList.add('beugroDoboz'); //ezt majd a nyertes div-hez is akarom, alapvető formázások ugyanazok
     document.body.appendChild(vesztettel);
+    emojiArcBeallitas('fa-face-tired');
+    idozitoMegallitas();
 }
 
 function elementLekereseIndexekkel(x, y){
@@ -297,6 +302,8 @@ function nyert(){
         nyertel.classList.add('nyertel');
         nyertel.classList.add('beugroDoboz');
         document.body.appendChild(nyertel);
+        emojiArcBeallitas('fa-face-laugh-beam');
+        idozitoMegallitas();
     }
 }
 
@@ -468,49 +475,61 @@ function szintek(){
         y = 30;
         jatekIndit();
     })
+
+    const szintValasztoGomb = document.getElementById('szintValasztoGomb');
+    const szintValaszto = document.getElementById('szintValaszto');
+    const szintek = document.getElementById('szintek');
+    const foTarolo = document.getElementById('foTarolo');
+
+    // bezarodik, ha a modalon kívűl kattint
+    szintValaszto.addEventListener('click', (event) => {
+        szintValaszto.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    })
+
+    // meggátolja, hogy bezárodojon, ha a modalra rákattint
+    szintek.addEventListener('click', (event) => {
+        event.stopPropagation();
+    })
+
+    szintValasztoGomb.addEventListener('click', (event) => {
+        szintValaszto.style.display = 'flex';
+        foTarolo.style.display = 'none';
+    })//a szintválasztó gomb megnyomásával megjelennek a szintek gombjai
+
+    const kezdoGomb = document.getElementById('kezdo');//ez a 3 eventlistener azt kezeli le, hogy mikor, melyik szint gombjai menjenek
+    kezdoGomb.addEventListener('click', (event) => {
+        kezdoGomb.disabled = true;
+        haladoGomb.disabled = false;
+        szakertoGomb.disabled = false;
+        szintValaszto.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    })
+
+    const haladoGomb = document.getElementById('halado');
+    haladoGomb.addEventListener('click', (event) => {
+        haladoGomb.disabled = true;
+        kezdoGomb.disabled = false;
+        szakertoGomb.disabled = false;
+        szintValaszto.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    })
+
+    const szakertoGomb = document.getElementById('szakerto');
+    szakertoGomb.addEventListener('click', (event) => {
+        szakertoGomb.disabled = true;
+        haladoGomb.disabled = false;
+        kezdoGomb.disabled = false;
+        szintValaszto.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    })
+
+    const szintekBezaras = document.getElementById('szintekBezaras');
+    szintekBezaras.addEventListener('click', (event) => {
+        szintValaszto.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    })
 }
-
-const szintValasztoGomb = document.getElementById('szintValasztoGomb');
-const szintValaszto = document.getElementById('szintValaszto');
-const foTarolo = document.getElementById('foTarolo');
-
-szintValasztoGomb.addEventListener('click', (event)=>{
-    szintValaszto.style.display = 'flex';
-    foTarolo.style.display = 'none';
-})//a szintválasztó gomb megnyomásával megjelennek a szintek gombjai
-
-const kezdoGomb = document.getElementById('kezdo');//ez a 3 eventlistener azt kezeli le, hogy mikor, melyik szint gombjai menjenek
-kezdoGomb.addEventListener('click', (event)=>{
-    kezdoGomb.disabled = true;
-    haladoGomb.disabled = false;
-    szakertoGomb.disabled = false;
-    szintValaszto.style.display = 'none';
-    foTarolo.style.display = 'flex';
-})
-
-const haladoGomb = document.getElementById('halado');
-haladoGomb.addEventListener('click', (event)=>{
-    haladoGomb.disabled = true;
-    kezdoGomb.disabled = false;
-    szakertoGomb.disabled = false;
-    szintValaszto.style.display = 'none';
-    foTarolo.style.display = 'flex';
-})
-
-const szakertoGomb = document.getElementById('szakerto');
-szakertoGomb.addEventListener('click', (event)=>{
-    szakertoGomb.disabled = true;
-    haladoGomb.disabled = false;
-    kezdoGomb.disabled = false;
-    szintValaszto.style.display = 'none';
-    foTarolo.style.display = 'flex';
-})
-
-const szintekBezaras = document.getElementById('szintekBezaras');
-szintekBezaras.addEventListener('click', (event)=>{
-    szintValaszto.style.display = 'none';
-    foTarolo.style.display = 'flex';
-})
 
 function palyaTisztitas(){
     bombakSzama = 0;
@@ -534,7 +553,7 @@ function palyaTisztitas(){
 
 function idozito() {
     if (intervallum) {
-        clearInterval(intervallum);
+        idozitoNullazas();
     }
 
     const kezdoIdo = Date.now();
@@ -560,6 +579,16 @@ function idozito() {
     }, 100)
 }
 
+function idozitoNullazas() {
+    idozitoMegallitas();
+    const szamlalo = document.getElementById('szamlalo');
+    szamlalo.textContent = "00:00";
+}
+
+function idozitoMegallitas() {
+    clearInterval(intervallum);
+}
+
 function zeneLejatszas() { 
   zene.play();
   zeneFolyamatbanVanE = true;
@@ -583,5 +612,26 @@ function zeneInicializalas(){
             zeneLejatszas();
         }
     })
+}
+function emojiInicializalas() {
+    const emoji = document.getElementById('emojiGomb');
+    emoji.addEventListener('click', (event) =>{
+       jatekIndit();
+    });
+}
+
+function emojiArcBeallitas(arc) {
+    const emojiIkon = document.getElementById('emojiGomb').querySelector('i');
+
+    if (arc === "fa-face-smile") {
+        emojiIkon.classList.remove('fa-face-tired', 'fa-face-laugh-beam');
+        emojiIkon.classList.add('fa-face-smile');
+    } else if (arc === "fa-face-tired") {
+        emojiIkon.classList.remove('fa-face-smile', 'fa-face-laugh-beam');
+        emojiIkon.classList.add('fa-face-tired');
+    } else if (arc === "fa-face-laugh-beam") {
+        emojiIkon.classList.remove('fa-face-tired', 'fa-face-smile');
+        emojiIkon.classList.add('fa-face-laugh-beam');
+    }
 }
 
