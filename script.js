@@ -11,6 +11,7 @@ let intervallum;
 
 zeneInicializalas();
 szintek();
+jatekszabalyzat();
 emojiInicializalas();
 jatekIndit();
 
@@ -260,14 +261,42 @@ function bombaKattint(x, y){
             }
         }
     }
-    
-    const vesztettel = document.createElement('div'); //vesztés tényének kiírása egy div-be
-    vesztettel.textContent = 'Vesztettél!';
-    vesztettel.classList.add('vesztettel');
-    vesztettel.classList.add('beugroDoboz'); //ezt majd a nyertes div-hez is akarom, alapvető formázások ugyanazok
-    document.body.appendChild(vesztettel);
+
+    modalMutatElrejt(true, 'vesztettel');
     emojiArcBeallitas('fa-face-tired');
     idozitoMegallitas();
+}
+
+//megjeleníti, vagy elrejti a megadott modal-t és a főtárolót
+function modalMutatElrejt(mutat, modalNev) {
+
+    const modal = document.getElementById(modalNev);
+    const foTarolo = document.getElementById('foTarolo');
+
+    if (!modal) {
+        return;
+    }
+
+    if (mutat) {
+        modal.style.display = 'flex';
+        foTarolo.style.display = 'none';
+
+        //kattintás esetén eltünik
+        modal.addEventListener('click', (event)=>{
+            modal.style.display = 'none';
+            foTarolo.style.display = 'flex';
+        });
+
+        // modal automatikus eltüntetése idővel
+        setTimeout(() =>{
+            modal.style.display = 'none';
+            foTarolo.style.display = 'flex';
+        }, 30000)
+
+    } else {
+        modal.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    }
 }
 
 function elementLekereseIndexekkel(x, y){
@@ -297,11 +326,7 @@ function nyert(){
 
     if(nyertEFelfedve || (nyertEZaszlokkal && nincsTevesZaszlo)){
         jatszikE = false;
-        const nyertel = document.createElement('div'); //nyerés tényének kiírása egy div-be
-        nyertel.textContent = 'Gratulálok, nyertél!';
-        nyertel.classList.add('nyertel');
-        nyertel.classList.add('beugroDoboz');
-        document.body.appendChild(nyertel);
+        modalMutatElrejt(true, 'nyertel');
         emojiArcBeallitas('fa-face-laugh-beam');
         idozitoMegallitas();
     }
@@ -454,6 +479,33 @@ function kornyezoMezokLekerese(x,y, matrix) {
     return kornyezoMezok;
 }
 
+function jatekszabalyzat() {
+    const jatekszabalyzatTarolo = document.getElementById('jatekszabalyzatTarolo');
+    const jatekSzabalyzatGomb = document.getElementById('jatekSzabalyzatGomb');
+    const jatekszabalyzat = document.getElementById('jatekszabalyzat');
+    const foTarolo = document.getElementById('foTarolo');
+
+    jatekSzabalyzatGomb.addEventListener('click', (event) => {
+        foTarolo.style.display = 'none';
+        jatekszabalyzatTarolo.style.display = 'flex';
+    })
+
+    jatekszabalyzatTarolo.addEventListener('click', (event) => {
+        jatekszabalyzatTarolo.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    })
+
+    jatekszabalyzat.addEventListener('click', (event) => {
+        event.stopPropagation();
+    })
+
+    const jatekszabalyzatBezaras = document.getElementById('jatekszabalyzatBezaras');
+    jatekszabalyzatBezaras.addEventListener('click', (event) => {
+        jatekszabalyzatTarolo.style.display = 'none';
+        foTarolo.style.display = 'flex';
+    })
+}
+
 function szintek(){
     const kezdo = document.getElementById('kezdo');
     kezdo.addEventListener('click', (event)=>{
@@ -541,14 +593,8 @@ function palyaTisztitas(){
     if(zaszlok && zaszlok.length > 0){
         zaszlok[0].remove();
     }
-    const vesztettel = document.getElementsByClassName('vesztettel');
-    if(vesztettel && vesztettel.length > 0){
-        vesztettel[0].remove();
-    }
-    const nyertel = document.getElementsByClassName('nyertel');
-    if(nyertel && nyertel.length > 0){
-        nyertel[0].remove();
-    }
+    modalMutatElrejt(false, 'vesztettel');
+    modalMutatElrejt(false, 'nyertel');
 }
 
 function idozito() {
