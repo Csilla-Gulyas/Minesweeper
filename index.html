@@ -44,12 +44,12 @@
                     <i class="fa-regular fa-xmark"></i>
                 </button>
             </div>
-            <h2 class="jatekszabalyzat-cim">🧨 Aknakereső – Játékszabályzat</h2>
+            <h2 class="jatekszabalyzat-cim">Aknakereső – Játékszabályzat</h2>
             <div class="jatekszabalyzat-belso-tarolo">
-                <h3>🎯 A játék célja</h3>
+                <h3>A játék célja</h3>
                 <p>Találd meg az összes aknát a pályán, vagy fedd fel az összes <strong>akna mentes mezőt</strong>! Logikai következtetés alapján döntsd el, mely mezők biztonságosak, és melyek rejthetnek bombát.</p>
 
-                <h3>📋 Felhasználói felület és vezérlők</h3>
+                <h3>Felhasználói felület és vezérlők</h3>
                 <ul>
                     <li><strong>Szintválasztó</strong>: A játék nehézségi szintje:
                         <ul>
@@ -64,7 +64,7 @@
                     <li><strong>Időmérő</strong> (jobb oldalon): Mutatja az eltelt időt.</li>
                 </ul>
 
-                <h3>🕹️ Játékvezérlés</h3>
+                <h3>Játékvezérlés</h3>
                 <ul>
                     <li><strong>Bal egérgomb</strong>: Mező <em>felfedése</em>.</li>
                     <li><strong>Jobb egérgomb</strong>:
@@ -75,10 +75,10 @@
                     </li>
                 </ul>
 
-                <h3>🔊 Zenevezérlés</h3>
+                <h3>Zenevezérlés</h3>
                 <p>A pálya <strong>alatt</strong> egy kazetta ikon található. Erre kattintva <em>elindítható vagy megállítható</em> a háttérzene.</p>
 
-                <h3>🧠 A mezők jelentése</h3>
+                <h3>A mezők jelentése</h3>
                 <ul>
                     <li><strong>Számmező</strong>: Megmutatja, hány bomba van a szomszédos mezőkben.</li>
                     <li><strong>Üres mező</strong>: Nincs bomba a környékén – automatikusan felfedi a környező mezőket is.</li>
@@ -86,14 +86,14 @@
                     <li><strong>Aknás mező</strong>: Ha felfeded, <strong>véget ér a játék</strong>.</li>
                 </ul>
 
-                <h3>🏆 Győzelem feltétele</h3>
+                <h3>Győzelem feltétele</h3>
                 <p>A játékot kétféleképpen nyerheted meg:</p>
                 <ol>
                     <li><strong>Felfeded az összes akna mentes mezőt.</strong></li>
                     <li><strong>Megjelölöd az összes bombát zászlóval.</strong></li>
                 </ol>
 
-                <h3>⚠️ Egyéb megjegyzések</h3>
+                <h3>Egyéb megjegyzések</h3>
                 <ul>
                     <li>Az első kattintás mindig <strong>biztonságos</strong>.</li>
                     <li>A zászlók száma megegyezik a pályán elhelyezett bombák számával.</li>
@@ -147,7 +147,11 @@
                     <source src="zene.m4a" type="audio/ogg">
                     <source src="zene.m4a" type="audio/mpeg">
                 </audio>
-                <img id="zeneGomb" src="kazetta.svg" alt="Kazetta">
+                <div class="kazetta-tarolo" id="zeneGomb">
+                    <img class="kazetta-ures" src="kazetta_ures.svg" alt="">
+                    <img class="kazetta-kor kazetta-kor-bal" src="kazetta_kor.svg" alt="">
+                    <img class="kazetta-kor kazetta-kor-jobb" src="kazetta_kor.svg" alt="">
+                </div>
             </div>
             <div class="border">
                 <div class="border-1 ures-tabla-alatt">

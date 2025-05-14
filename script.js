@@ -638,11 +638,19 @@ function idozitoMegallitas() {
 function zeneLejatszas() { 
   zene.play();
   zeneFolyamatbanVanE = true;
+  const korok = document.getElementsByClassName('kazetta-kor');
+  for (let i = 0; i < korok.length; i++) {
+      korok[i].classList.add('kazetta-forgatas');
+  }
 } 
 
 function zeneMegallitas() { 
   zene.pause();
   zeneFolyamatbanVanE = false;
+    const korok = document.getElementsByClassName('kazetta-kor');
+    for (let i = 0; i < korok.length; i++) {
+        korok[i].classList.remove('kazetta-forgatas');
+    }
 } 
 
 function zeneInicializalas(){

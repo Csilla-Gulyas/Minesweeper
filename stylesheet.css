@@ -162,7 +162,6 @@ body{
     border-color: #00ffff;
     border-radius: 5px;
     box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 0.6);
-
 }
 
 .border-1 {
@@ -371,14 +370,14 @@ drop-shadow(0 0 1px rgb(221, 126, 59, 0.9)) drop-shadow(0 0 2px rgba(221, 126, 5
 }
 
 .jatekszabalyzat-belso-tarolo li, p {
-    margin-bottom: 8px;
+    margin-top: 8px;
 }
 
 .jatekszabalyzat-belso-tarolo h3 {
     width: 100%;
     font-size: 20px;
     text-align: start;
-    margin: 28px 0 12px 0;
+    margin: 32px 0 4px 0;
 }
 
 .szintek-gombok-tarolo {
@@ -436,12 +435,50 @@ drop-shadow(0 0 1px rgb(221, 126, 59, 0.9)) drop-shadow(0 0 2px rgba(221, 126, 5
 
 .zene-lejatszas {
     width: 130px;
+    padding: 0;
+}
+
+.kazetta-tarolo {
+    margin: -5px;
+    width: calc(100% + 10px);
+    height: auto;
+    position: relative;
+}
+
+.kazetta-ures, .kazetta-kor {
+    filter: invert(84%) sepia(96%) saturate(7500%) hue-rotate(104deg) brightness(103%) contrast(102%)
+            drop-shadow(0 0 1px rgba(0, 255, 255, 0.5)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.4)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
+}
+
+.kazetta-ures {
+    width: 100%;
     height: auto;
 }
 
-.zene-lejatszas img {
-    width: 100%;
-    filter: invert(84%) sepia(96%) saturate(7500%) hue-rotate(104deg) brightness(103%) contrast(102%)
-    drop-shadow(0 0 1px rgba(0, 255, 255, 0.5)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.4)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
+.kazetta-kor {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 36%;
+}
 
+.kazetta-kor-bal {
+    right: 23%;
+}
+
+.kazetta-kor-jobb {
+    left: 23%;
+}
+
+.kazetta-forgatas {
+    animation: forgas 2s linear infinite;
+}
+
+@keyframes forgas {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
