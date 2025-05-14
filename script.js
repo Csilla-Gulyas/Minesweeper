@@ -291,7 +291,7 @@ function modalMutatElrejt(mutat, modalNev) {
         setTimeout(() =>{
             modal.style.display = 'none';
             foTarolo.style.display = 'flex';
-        }, 30000)
+        }, 3000)
 
     } else {
         modal.style.display = 'none';
