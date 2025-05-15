@@ -268,42 +268,65 @@ function bombaKattint(x, y){
         }
     }
 
+    //pointer és hover eltávolítása
+    for(let i = 0; i < palyaTomb.length; i++){
+        for(let j = 0; j < palyaTomb[i].length; j++){
+            const mezo = palyaTomb[i][j];
+            if(!mezo.felforditottE){
+                const leforditott = elementLekereseIndexekkel(i, j);
+                leforditott.style.pointerEvents = "none";
+            }
+        }
+    }
+
     modalMutatElrejt(true, 'vesztettel');
     emojiArcBeallitas('fa-face-tired');
     idozitoMegallitas();
 }
 
 //megjeleníti, vagy elrejti a megadott modal-t és a főtárolót
-function modalMutatElrejt(mutat, modalNev) {
+function modalMutatElrejt(mutat, modalTaroloNev) {
 
-    const modal = document.getElementById(modalNev);
+    const modalTarolo = document.getElementById(modalTaroloNev);
     const foTarolo = document.getElementById('foTarolo');
+    const focim = document.getElementById('focim');
 
-    if (!modal) {
+    if (!modalTarolo) {
         return;
     }
 
-    if (mutat) {
-        // setTimeout(()=>{
-            modal.style.display = 'flex';
-            foTarolo.style.visibility = 'hidden';
-        // }, 1000);
+    if (!mutat) { // modalTarolo elrejtese
+        modalTarolo.classList.remove('popup-scale-in');
+        setTimeout(() => {
+            foTarolo.classList.add('fade-in');
+            focim.classList.add('fade-in');
+            foTarolo.classList.remove('fade-out');
+            focim.classList.remove('fade-out');
+        }, 150);
+
+        setTimeout(() => {
+            modalTarolo.classList.remove('active');
+        }, 300);
+
+    } else { //modalTarolo megjelenitese
+        modalTarolo.classList.add('active');
+        requestAnimationFrame(() => {
+            foTarolo.classList.remove('fade-in');
+            focim.classList.remove('fade-in');
+            modalTarolo.classList.add('popup-scale-in');
+            foTarolo.classList.add('fade-out');
+            focim.classList.add('fade-out');
+        });
 
         //kattintás esetén eltünik
-        modal.addEventListener('click', (event)=>{
-            modal.style.display = 'none';
-            foTarolo.style.visibility = 'visible';
+        modalTarolo.addEventListener('click', (event)=>{
+            modalMutatElrejt(false, modalTaroloNev);
         });
 
         // modal automatikus eltüntetése idővel
         setTimeout(() =>{
-            modal.style.display = 'none';
-            foTarolo.style.visibility = 'visible';
+            modalMutatElrejt(false, modalTaroloNev);
         }, 3000)
-
-    } else {
-        modal.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
     }
 }
 
@@ -491,19 +514,13 @@ function jatekszabalyzat() {
     const jatekszabalyzatTarolo = document.getElementById('jatekszabalyzatTarolo');
     const jatekSzabalyzatGomb = document.getElementById('jatekSzabalyzatGomb');
     const jatekszabalyzat = document.getElementById('jatekszabalyzat');
-    const foTarolo = document.getElementById('foTarolo');
-    const focim = document.getElementById('focim');
 
     jatekSzabalyzatGomb.addEventListener('click', (event) => {
-        foTarolo.style.visibility = 'hidden';
-        focim.style.visibility = 'hidden';
-        jatekszabalyzatTarolo.style.display = 'flex';
+        modalMutatElrejtAnimacioval(true, 'jatekszabalyzatTarolo');
     })
 
     jatekszabalyzatTarolo.addEventListener('click', (event) => {
-        jatekszabalyzatTarolo.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
-        focim.style.visibility = 'visible';
+        modalMutatElrejtAnimacioval(false, 'jatekszabalyzatTarolo');
     })
 
     jatekszabalyzat.addEventListener('click', (event) => {
@@ -512,9 +529,7 @@ function jatekszabalyzat() {
 
     const jatekszabalyzatBezaras = document.getElementById('jatekszabalyzatBezaras');
     jatekszabalyzatBezaras.addEventListener('click', (event) => {
-        jatekszabalyzatTarolo.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
-        focim.style.visibility = 'visible';
+        modalMutatElrejtAnimacioval(false, 'jatekszabalyzatTarolo');
     })
 }
 
@@ -543,14 +558,10 @@ function szintek(){
     const szintValasztoGomb = document.getElementById('szintValasztoGomb');
     const szintValaszto = document.getElementById('szintValaszto');
     const szintek = document.getElementById('szintek');
-    const foTarolo = document.getElementById('foTarolo');
-    const focim = document.getElementById('focim');
 
     // bezarodik, ha a modalon kívűl kattint
     szintValaszto.addEventListener('click', (event) => {
-        szintValaszto.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
-        focim.style.visibility = 'visible';
+        modalMutatElrejtAnimacioval(false, 'szintValaszto');
     })
 
     // meggátolja, hogy bezárodojon, ha a modalra rákattint
@@ -559,9 +570,7 @@ function szintek(){
     })
 
     szintValasztoGomb.addEventListener('click', (event) => {
-        szintValaszto.style.display = 'flex';
-        foTarolo.style.visibility = 'hidden';
-        focim.style.visibility = 'hidden';
+        modalMutatElrejtAnimacioval(true, 'szintValaszto');
     })//a szintválasztó gomb megnyomásával megjelennek a szintek gombjai
 
     const kezdoGomb = document.getElementById('kezdo');//ez a 3 eventlistener azt kezeli le, hogy mikor, melyik szint gombjai menjenek
@@ -569,12 +578,7 @@ function szintek(){
         kezdoGomb.disabled = true;
         haladoGomb.disabled = false;
         szakertoGomb.disabled = false;
-        szintValaszto.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
-        focim.style.visibility = 'visible';
-        // kezdoGomb.style.cursor = 'auto';
-        // haladoGomb.style.cursor = 'pointer';
-        // szakertoGomb.cursor = 'pointer';
+        modalMutatElrejtAnimacioval(false, 'szintValaszto');
     })
 
     const haladoGomb = document.getElementById('halado');
@@ -582,12 +586,7 @@ function szintek(){
         haladoGomb.disabled = true;
         kezdoGomb.disabled = false;
         szakertoGomb.disabled = false;
-        szintValaszto.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
-        focim.style.visibility = 'visible';
-        // haladoGomb.style.cursor = 'auto';
-        // kezdoGomb.style.cursor = 'pointer';
-        // szakertoGomb.cursor = 'pointer';
+        modalMutatElrejtAnimacioval(false, 'szintValaszto');
     })
 
     const szakertoGomb = document.getElementById('szakerto');
@@ -595,20 +594,44 @@ function szintek(){
         szakertoGomb.disabled = true;
         haladoGomb.disabled = false;
         kezdoGomb.disabled = false;
-        szintValaszto.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
-        focim.style.visibility = 'visible';
-        // szakertoGomb.style.cursor = 'auto';
-        // haladoGomb.style.cursor = 'pointer';
-        // kezdoGomb.cursor = 'pointer';
+        modalMutatElrejtAnimacioval(false, 'szintValaszto');
     })
 
     const szintekBezaras = document.getElementById('szintekBezaras');
     szintekBezaras.addEventListener('click', (event) => {
-        szintValaszto.style.display = 'none';
-        foTarolo.style.visibility = 'visible';
-        focim.style.visibility = 'visible';
+        modalMutatElrejtAnimacioval(false, 'szintValaszto');
     })
+}
+
+function modalMutatElrejtAnimacioval(mutat, modalTaroloNev) {
+
+    const modalTarolo = document.getElementById(modalTaroloNev);
+    const foTarolo = document.getElementById('foTarolo');
+    const focim = document.getElementById('focim');
+
+    if (!mutat) { // modalTarolo elrejtese
+        modalTarolo.classList.remove('popup-scale-in');
+        setTimeout(() => {
+            foTarolo.classList.add('fade-in');
+            focim.classList.add('fade-in');
+            foTarolo.classList.remove('fade-out');
+            focim.classList.remove('fade-out');
+        }, 150);
+
+        setTimeout(() => {
+            modalTarolo.classList.remove('active');
+        }, 300);
+
+    } else { //modalTarolo megjelenitese
+        modalTarolo.classList.add('active');
+        setTimeout(() => {
+            foTarolo.classList.remove('fade-in');
+            focim.classList.remove('fade-in');
+            modalTarolo.classList.add('popup-scale-in');
+            foTarolo.classList.add('fade-out');
+            focim.classList.add('fade-out');
+        }, 0);
+    }
 }
 
 function palyaTisztitas(){

@@ -168,7 +168,7 @@ body{
     filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.9)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.8)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));;
 }
 .fa-face-tired{
-    color: e8071a;
+    color: #e8071a;
     filter: drop-shadow(0 0 1px hwb(355 3% 9% / 0.9)) drop-shadow(0 0 2px rgba(232, 7, 26, 0.8)) drop-shadow(0 0 3px rgba(232, 7, 26, 0.6));
 }
 
@@ -548,4 +548,40 @@ body{
     to {
         transform: rotate(360deg);
     }
+}
+
+#szintek, #jatekszabalyzat {
+    position: fixed;
+    transform: scale(2);
+    opacity: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.vesztettel, .nyertel {
+    position: fixed;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.popup-scale-in #szintek, .popup-scale-in #jatekszabalyzat {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.popup-scale-in .vesztettel, .popup-scale-in .nyertel {
+    opacity: 1;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.active {
+    display: flex !important;
 }
