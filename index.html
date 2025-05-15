@@ -7,12 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
     <link rel="stylesheet" href="stylesheet.css">
-    <link rel="icon" href="akna_piros.png">
+    <link rel="icon" href="smile.png">
     <script src="script.js" defer></script>
     <title>Aknakereső</title>
 </head>
 <body>
-    <div class="focim">Aknakereső</div>
+    <div id="focim" class="focim">Aknakereső</div>
     <div id="vesztettel" class="vesztettel-tarolo">
         <div class="vesztettel">
             <h2>Vesztettél!</h2>
@@ -30,6 +30,7 @@
                     <i class="fa-regular fa-xmark"></i>
                 </button>
             </div>
+            <h2 class="szintek-cim">Aknakereső – Szintválasztó</h2>
             <div class="szintek-gombok-tarolo">
                 <button id="kezdo" disabled>Kezdő</button>
                 <button id="halado">Haladó</button>
@@ -118,7 +119,7 @@
                     <img class="zaszlo-kepe" src="zaszlo.png" alt="Zászló">
                 </div>
             </div>
-            <div class="border">
+            <div class="border border-animacio">
                 <div class="border-1 emoji">
                     <button id="emojiGomb">
                         <i class="fa-thin fa-face-smile"></i>
@@ -142,7 +143,7 @@
                 <div class="border-1 ures-tabla-alatt">
                 </div>
             </div>
-            <div class="zene-lejatszas border">
+            <div class="zene-lejatszas border border-animacio">
                 <audio id="zene">
                     <source src="zene.m4a" type="audio/ogg">
                     <source src="zene.m4a" type="audio/mpeg">
