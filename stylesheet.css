@@ -66,10 +66,6 @@ body{
 
     font-size: 20px;
     cursor: pointer;
-    /* color: #da2784;
-    text-shadow: 0 0 30px rgba(218, 39, 132, 1)
-    , 0 0 60px rgba(218, 39, 132, 1)
-    , 0 0 120px rgba(218, 39, 132, 1);*/
     color: #00ffff;
     text-shadow: 0px 0px 16px rgba(0, 255, 255, 0.6);
   
@@ -150,8 +146,6 @@ body{
 
 #emojiGomb i {
     font-size: 50px;
-    /* color: #00ffff; */
-    /* filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.9)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.8)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));; */
     cursor: pointer;
 }
 
@@ -166,9 +160,7 @@ body{
 
 .fa-face-laugh-beam{
     color: #da2784;
-    filter: drop-shadow(0 0 2px rgba(218, 39, 132, 0.8))
-        drop-shadow(0 0 6px rgba(218, 39, 132, 0.6))
-        drop-shadow(0 0 12px rgba(218, 39, 132, 0.4));
+    filter: drop-shadow(0 0 2px rgba(218, 39, 132, 0.8)) drop-shadow(0 0 6px rgba(218, 39, 132, 0.6)) drop-shadow(0 0 12px rgba(218, 39, 132, 0.4));
 }
 
 .border {
@@ -214,24 +206,9 @@ body{
     border-style: solid;
     border-width: 1px;
     border-color: #00ffff;
-    /* box-shadow:
-    0 0 5px #00ffff,
-    0 0 10px #00ffff,
-    0 0 20px #00ffff,
-    0 0 40px rgba(0, 255, 255, 0.4);
-    transition: box-shadow 0.2s ease; */
     align-items: center;
     justify-items: center;
 }
-
-/* .tabla:hover {
-    box-shadow:
-      0 0 8px #00ffff,
-      0 0 16px #00ffff,
-      0 0 32px #00ffff,
-      0 0 64px rgba(0, 255, 255, 0.6);
-    cursor: pointer;
-} */
 
 .mezo-kontener {
     width: 100%;
@@ -242,10 +219,7 @@ body{
     border-style: solid;
     border-width: 1px;
     border-color: #00ffff;
-    /* border-color: #84b9dd; */
-    /* box-shadow: 0px 0px 150px 5px rgba(45,255,196,0.2); */
     box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 0.6);
-    /* box-shadow: 0px 0px 150px 2px #84b9dd; */
   }
 
 .mezok{
@@ -274,9 +248,7 @@ body{
     justify-content: center;
     align-items: center;
     color: #da2784;
-    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6)
-    , 0 0 60px rgba(218, 39, 132, 0.6)
-    , 0 0 120px rgba(218, 39, 132, 0.6);
+    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6), 0 0 60px rgba(218, 39, 132, 0.6), 0 0 120px rgba(218, 39, 132, 0.6);
     font-weight: bold;
     font-family: 'Audiowide', cursive;
 }
@@ -292,7 +264,6 @@ body{
 
 .aBomba{
     background-image: url("img/akna_piros.png");
-    /*e8071a*/
     filter: drop-shadow(0 0 1px rgba(232, 7, 26, 0.9)) drop-shadow(0 0 2px rgba(232, 7, 26, 0.8)) drop-shadow(0 0 3px rgba(232, 7, 26, 0.6));
     border-width: 0;
     background-size: max(24px);
@@ -372,9 +343,7 @@ body{
     font-size: 32px;
     text-align: center;
     color: #da2784;
-    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6)
-    , 0 0 60px rgba(218, 39, 132, 0.6)
-    , 0 0 120px rgba(218, 39, 132, 0.6);
+    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6), 0 0 60px rgba(218, 39, 132, 0.6), 0 0 120px rgba(218, 39, 132, 0.6);
 }
 
 .jatekszabalyzat-belso-tarolo {
@@ -407,9 +376,7 @@ body{
     text-align: start;
     margin: 32px 0 4px 0;
     color: #da2784;
-    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6)
-    , 0 0 60px rgba(218, 39, 132, 0.6)
-    , 0 0 120px rgba(218, 39, 132, 0.6);
+    text-shadow: 0 0 30px rgba(218, 39, 132, 0.6), 0 0 60px rgba(218, 39, 132, 0.6), 0 0 120px rgba(218, 39, 132, 0.6);
 }
 
 .szintek-gombok-tarolo {
@@ -441,14 +408,6 @@ body{
     text-transform: uppercase;
 }
 
-/* #halado, #szakerto{
-    cursor: pointer;
-}
-
-#kezdo{
-    cursor: auto;
-} */
-
 .szintek-gombok-tarolo button:not(:disabled):hover {
     filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.5)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.4)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
     box-shadow: 0 0 4px 1px rgba(0, 255, 255, 0.8);
@@ -458,7 +417,6 @@ body{
     cursor: auto;
     color: rgba(0, 255, 255, 0.4);
     border: 1px solid rgba(0, 255, 255, 0.4);
-    /* box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 0.2); */
     background-color: #00ffff0a;
 }
 

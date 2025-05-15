@@ -245,7 +245,6 @@ function bombaKattint(x, y){
             if(mezo.bombaE){
                 const elem = elementLekereseIndexekkel(i, j);
                 if (!mezo.zaszlosE){
-                    //TODO: lekezelni, ha fel van fordítva
                     elem.classList.remove('leforditott');
                     elem.classList.add('bomba');
                     if(i == x && j == y){
@@ -256,7 +255,7 @@ function bombaKattint(x, y){
             }
         }
     }
-    for(let i = 0; i < palyaTomb.length; i++){
+    for(let i = 0; i < palyaTomb.length; i++){ //vesztéskor a korábban tévesen lerakott zászlók pirosan jelennek meg
         for(let j = 0; j < palyaTomb[i].length; j++){
             const mezo = palyaTomb[i][j];
             if(mezo.zaszlosE){
@@ -285,7 +284,7 @@ function bombaKattint(x, y){
 }
 
 //megjeleníti, vagy elrejti a megadott modal-t és a főtárolót
-function modalMutatElrejt(mutat, modalTaroloNev) {
+function modalMutatElrejt(mutat, modalTaroloNev) { //fadeIn és fadeOut animációval megjeleníti a nyertes/vesztes modal-t
 
     const modalTarolo = document.getElementById(modalTaroloNev);
     const foTarolo = document.getElementById('foTarolo');
@@ -308,7 +307,7 @@ function modalMutatElrejt(mutat, modalTaroloNev) {
             modalTarolo.classList.remove('active');
         }, 300);
 
-    } else { //modalTarolo megjelenitese
+    } else { //modalTarolo megjelenítése
         modalTarolo.classList.add('active');
         requestAnimationFrame(() => {
             foTarolo.classList.remove('fade-in');
@@ -318,7 +317,7 @@ function modalMutatElrejt(mutat, modalTaroloNev) {
             focim.classList.add('fade-out');
         });
 
-        //kattintás esetén eltünik
+        //kattintás esetén eltűnik
         modalTarolo.addEventListener('click', (event)=>{
             modalMutatElrejt(false, modalTaroloNev);
         });
@@ -330,7 +329,7 @@ function modalMutatElrejt(mutat, modalTaroloNev) {
     }
 }
 
-function elementLekereseIndexekkel(x, y){
+function elementLekereseIndexekkel(x, y){ //tömb adott eleméhez tartozó HTML element lekérdezése
     const elem = document.querySelector(`[data-index-x="${x}"][data-index-y="${y}"]`);
     return elem;
 }
@@ -355,7 +354,7 @@ function nyert(){
         }
     }
 
-    if(nyertEFelfedve || (nyertEZaszlokkal && nincsTevesZaszlo)){
+    if(nyertEFelfedve || (nyertEZaszlokkal && nincsTevesZaszlo)){ //ha minden zaszló alatt bomba van, vagy ha minden nem akna fel van fedve nyer a felhasználó
         jatszikE = false;
         modalMutatElrejt(true, 'nyertel');
         emojiArcBeallitas('fa-face-laugh-beam');
@@ -363,7 +362,7 @@ function nyert(){
     }
 }
 
-function zaszloKezdoAllapot(){
+function zaszloKezdoAllapot(){ //zaszlo számláló inicializálása
     zaszlokSzama = bombakSzama;
     const zaszlok = document.createElement('div'); //zaszló számláló div
     zaszlok.textContent = zaszlokSzama; //megadom az értékét
@@ -372,7 +371,7 @@ function zaszloKezdoAllapot(){
     zaszloTarolo.insertBefore(zaszlok, zaszloTarolo.children[1]);
 }
 
-function zaszloSzamlalo(csokkentsukE, indexX, indexY){
+function zaszloSzamlalo(csokkentsukE, indexX, indexY){ //zaszló kezelés
     const ujMezo = elementLekereseIndexekkel(indexX, indexY);
     if(csokkentsukE){
         if(zaszlokSzama >= 1){
@@ -400,7 +399,7 @@ function zaszloSzamlalo(csokkentsukE, indexX, indexY){
     }
 }
 
-function uresKattint(x, y){
+function uresKattint(x, y){ //kezeli az üres mezőre kattintást
     let ellenorizendoElemek = [];
     ellenorizendoElemek.push({x, y});
 
@@ -409,11 +408,10 @@ function uresKattint(x, y){
         let ujElemek = uresKattintKornyezoMezok(aktElem.x,  aktElem.y);
         ellenorizendoElemek.push(...ujElemek);
     }
-
     nyert();
 }
 
-function uresKattintKornyezoMezok(x, y) {
+function uresKattintKornyezoMezok(x, y) { //felfedi az aktuális mezőt, ha nem bomba és nincs felfordítva és, ha üres akkor lekéri a környező mezőket
     let ujEllenorizendoElemek = [];
 
     if(palyaTomb[x][y].felforditottE){
@@ -434,7 +432,7 @@ function uresKattintKornyezoMezok(x, y) {
     return ujEllenorizendoElemek;
 }
 
-function felfed(x, y) {
+function felfed(x, y) { //felfedi az aktuális mezőt, hogy ha nem bomba és nem zászló
     let palyaAktEleme = palyaTomb[x][y];
 
     // ha bomba, vagy zászló nem fut tovább a metódus
@@ -455,7 +453,7 @@ function felfed(x, y) {
     palyaAktEleme.felforditottE = true;
 }
 
-function kornyezoMezokLekerese(x,y, matrix) {
+function kornyezoMezokLekerese(x,y, matrix) { //visszatér a környező mezőkkel, amelyek nem zászlók és nem aknák
     let kornyezoMezok = [];
 
     //bal felső mező
@@ -510,7 +508,7 @@ function kornyezoMezokLekerese(x,y, matrix) {
     return kornyezoMezok;
 }
 
-function jatekszabalyzat() {
+function jatekszabalyzat() { //beállítja a játék szabályzathoz kapcsolódó event listener-eket
     const jatekszabalyzatTarolo = document.getElementById('jatekszabalyzatTarolo');
     const jatekSzabalyzatGomb = document.getElementById('jatekSzabalyzatGomb');
     const jatekszabalyzat = document.getElementById('jatekszabalyzat');
@@ -533,7 +531,7 @@ function jatekszabalyzat() {
     })
 }
 
-function szintek(){
+function szintek(){ //beállítja a szint választóhoz kapcsolódó event listener-eket
     const kezdo = document.getElementById('kezdo');
     kezdo.addEventListener('click', (event)=>{
         x = 9;
@@ -603,8 +601,7 @@ function szintek(){
     })
 }
 
-function modalMutatElrejtAnimacioval(mutat, modalTaroloNev) {
-
+function modalMutatElrejtAnimacioval(mutat, modalTaroloNev) { //szint választó és a játék szabályzat animáció kezelése
     const modalTarolo = document.getElementById(modalTaroloNev);
     const foTarolo = document.getElementById('foTarolo');
     const focim = document.getElementById('focim');
@@ -634,7 +631,7 @@ function modalMutatElrejtAnimacioval(mutat, modalTaroloNev) {
     }
 }
 
-function palyaTisztitas(){
+function palyaTisztitas(){ //alap állapotba állítja a játékot
     bombakSzama = 0;
     zaszlokSzama = 0;
     jatszikE = false;
@@ -648,7 +645,7 @@ function palyaTisztitas(){
     modalMutatElrejt(false, 'nyertel');
 }
 
-function idozito() {
+function idozito() { //létrehozza és elindítja az időzítőt
     if (intervallum) {
         idozitoNullazas();
     }
@@ -676,17 +673,17 @@ function idozito() {
     }, 100)
 }
 
-function idozitoNullazas() {
+function idozitoNullazas() { //alapállapotba állítja az időzítőt
     idozitoMegallitas();
     const szamlalo = document.getElementById('szamlalo');
     szamlalo.textContent = "00:00";
 }
 
-function idozitoMegallitas() {
+function idozitoMegallitas() { //megállítja az időzítőt
     clearInterval(intervallum);
 }
 
-function zeneLejatszas() { 
+function zeneLejatszas() { //elindítja a zenét és a hozzátartozó animációt
   zene.play();
   zeneFolyamatbanVanE = true;
   const korok = document.getElementsByClassName('kazetta-kor');
@@ -695,7 +692,7 @@ function zeneLejatszas() {
   }
 } 
 
-function zeneMegallitas() { 
+function zeneMegallitas() { //megállítja a zenét és a hozzátartozó animációt
   zeneElsoMegallitasTortentE = true; 
   zene.pause();
   zeneFolyamatbanVanE = false;
@@ -705,7 +702,7 @@ function zeneMegallitas() {
     }
 } 
 
-function zeneInicializalas(){
+function zeneInicializalas(){ //beállítja a zene gombjához tartozó event listener-t és a zenét
     zene = document.getElementById("zene"); 
     zene.loop = true;
 
@@ -719,14 +716,15 @@ function zeneInicializalas(){
         }
     })
 }
-function emojiInicializalas() {
+
+function emojiInicializalas() { //beállítja az újraindítás gombot
     const emoji = document.getElementById('emojiGomb');
     emoji.addEventListener('click', (event) =>{
        jatekIndit();
     });
 }
 
-function emojiArcBeallitas(arc) {
+function emojiArcBeallitas(arc) { //beállítja a megadott ikont 
     const emojiIkon = document.getElementById('emojiGomb').querySelector('i');
 
     if (arc === "fa-face-smile") {
