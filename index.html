@@ -12,41 +12,41 @@
     <title>Aknakereső</title>
 </head>
 <body>
-    <div id="focim" class="focim">Aknakereső</div>
-    <div id="vesztettel" class="vesztettel-tarolo">
-        <div class="vesztettel">
+    <div id="mainTitle" class="main-title">Aknakereső</div>
+    <div id="lost" class="lost-container">
+        <div class="lost">
             <h2>Vesztettél!</h2>
         </div>
     </div>
-    <div id="nyertel" class="nyertel-tarolo">
-        <div class="nyertel">
+    <div id="won" class="won-container">
+        <div class="won">
             <h2>Gratulálok, nyertél!!</h2>
         </div>
     </div>
-    <div id="szintValaszto">
-        <div id="szintek">
-            <div class="szintek-bezaras-tarolo">
-                <button id="szintekBezaras" class="szintek-bezaras">
+    <div id="levelSelector">
+        <div id="levels">
+            <div class="levels-close-container">
+                <button id="levelsClose" class="levels-close">
                     <i class="fa-regular fa-xmark"></i>
                 </button>
             </div>
-            <h2 class="szintek-cim">Aknakereső – Szintválasztó</h2>
-            <div class="szintek-gombok-tarolo">
-                <button id="kezdo" disabled>Kezdő</button>
-                <button id="halado">Haladó</button>
-                <button id="szakerto">Szakértő</button>
+            <h2 class="levels-title">Aknakereső – Szintválasztó</h2>
+            <div class="levels-buttons-container">
+                <button id="beginner" disabled>Kezdő</button>
+                <button id="advanced">Haladó</button>
+                <button id="expert">Szakértő</button>
             </div>
         </div>
     </div>
-    <div id="jatekszabalyzatTarolo">
-        <div id="jatekszabalyzat" class="jatekszabalyzat">
-            <div class="jatekszabalyzat-bezaras-tarolo">
-                <button id="jatekszabalyzatBezaras" class="jatekszabalyzat-bezaras">
+    <div id="gameRulesContainer">
+        <div id="gameRules" class="game-rules">
+            <div class="game-rules-close-container">
+                <button id="gameRulesClose" class="game-rules-close">
                     <i class="fa-regular fa-xmark"></i>
                 </button>
             </div>
-            <h2 class="jatekszabalyzat-cim">Aknakereső – Játékszabályzat</h2>
-            <div class="jatekszabalyzat-belso-tarolo">
+            <h2 class="game-rules-title">Aknakereső – Játékszabályzat</h2>
+            <div class="game-rules-inside-container">
                 <h3>A játék célja</h3>
                 <p>Találd meg az összes aknát a pályán, vagy fedd fel az összes <strong>akna mentes mezőt</strong>! Logikai következtetés alapján döntsd el, mely mezők biztonságosak, és melyek rejthetnek bombát.</p>
 
@@ -103,51 +103,51 @@
             </div>
         </div>
     </div>
-    <div id="foTarolo" class="fo-tarolo">
-        <div class="nav-sav">
-            <button id="szintValasztoGomb">Szint választása</button>
-            <button id="jatekSzabalyzatGomb">Játék szabályzat</button>
+    <div id="mainContainer" class="main-container">
+        <div class="nav-bar">
+            <button id="levelSelectorButton">Szint választása</button>
+            <button id="gameRulesButton">Játék szabályzat</button>
         </div>
-        <div id="tablaFelett">
+        <div id="aboveBoard">
             <div class="border">
-                <div class="border-1 zaszlo-tarolo">
-                    <img class="zaszlo-kepe" src="img/zaszlo.png" alt="Zászló">
+                <div class="border-1 flags-container">
+                    <img class="flag-image" src="img/zaszlo.png" alt="Zászló">
                 </div>
             </div>
-            <div class="border border-animacio">
+            <div class="border border-animation">
                 <div class="border-1 emoji">
-                    <button id="emojiGomb">
+                    <button id="emojiButton">
                         <i class="fa-thin fa-face-smile"></i>
                     </button>
                 </div>
             </div>
             <div class="border">
-                <div class="border-1 szamlalo-gomb">
-                    <div id="szamlalo">00:00</div>
+                <div class="border-1 timer-button">
+                    <div id="timer">00:00</div>
                 </div>
             </div>
         </div>
-        <div class="jatek-tabla-tarolo">
-            <div id="jatekTabla"></div>
+        <div class="game-board-container">
+            <div id="gameBoard"></div>
         </div>
-        <div class="tabla-alatt">
+        <div class="below-board">
             <div class="border">
-                <div class="border-1 ures-tabla-alatt">
+                <div class="border-1 below-empty-board">
                 </div>
             </div>
-            <div class="zene-lejatszas border border-animacio">
-                <audio id="zene">
+            <div class="music-player border border-animation">
+                <audio id="music">
                     <source src="zene.m4a" type="audio/ogg">
                     <source src="zene.m4a" type="audio/mpeg">
                 </audio>
-                <div class="kazetta-tarolo" id="zeneGomb">
-                    <img class="kazetta-ures" src="img/kazetta_ures.svg" alt="">
-                    <img class="kazetta-kor kazetta-kor-bal" src="img/kazetta_kor.svg" alt="">
-                    <img class="kazetta-kor kazetta-kor-jobb" src="img/kazetta_kor.svg" alt="">
+                <div class="cassette-container" id="musicButton">
+                    <img class="cassette-empty" src="img/kazetta_ures.svg" alt="">
+                    <img class="cassette-wheel cassette-wheel-left" src="img/kazetta_kor.svg" alt="">
+                    <img class="cassette-wheel cassette-wheel-right" src="img/kazetta_kor.svg" alt="">
                 </div>
             </div>
             <div class="border">
-                <div class="border-1 ures-tabla-alatt">
+                <div class="border-1 below-empty-board">
                 </div>
             </div>
         </div>

@@ -1,741 +1,732 @@
-let bombakSzama = 0;
-let zaszlokSzama = 0;
-let jatszikE = false;
-let elsoKattintasTortentE = false;
+let bombCount = 0;
+let flagsCount = 0;
+let isPlaying = false;
+let isFirstClickHappened = false;
 let x = 9;
 let y = 9;
-let palyaTomb;
-let zene;
-let zeneFolyamatbanVanE = false;
-let zeneElsoMegallitasTortentE = false;
-let intervallum;
+let boardMatrix;
+let music;
+let isMusicPlaying = false;
+let isFirstMusicStoppingHappened = false;
+let interval;
 
-zeneInicializalas();
-szintek();
-jatekszabalyzat();
-emojiInicializalas();
-jatekIndit();
+musicInitialization();
+levels();
+gameRules();
+emojiInitialization();
+startGame();
 
-function tombGeneral(x, y){
+function generateMatrix(x, y){
     const matrix = [];
     //létrehozunk egy két dimenziós objektum tömböt, aminek beállítjuk az alapértelmezett értékeit
     for(let i = 0; i < x; i++){
-        const sorok = [];
+        const rows = [];
         for(let j = 0; j < y; j++){
-            sorok.push({
-                felforditottE: false,
-                zaszlosE: false,
-                bombaE: false,
-                mezokErteke: 0
+            rows.push({
+                isRevealed: false,
+                isFlagged: false,
+                isBomb: false,
+                cellValue: 0
             });
         }
-        matrix.push(sorok);
+        matrix.push(rows);
     }
 
     //bombák számának megadása a pálya mérete szerint, a pályák egyre nehezednek, ahogy nő a méretük, több a bomba százalékosan
     if(x === 9 && y === 9){
-        bombakSzama = 10;
+        bombCount = 10;
     }
     else if(x === 16 && y === 16){
-        bombakSzama = 40;
+        bombCount = 40;
     }
     else if(x === 16 && y === 30){
-        bombakSzama = 99;
+        bombCount = 99;
     }
     return matrix;
 }
 
-function palyaFeltoltes(matrix, indexX, indexY){
+function fillBoard(matrix, indexX, indexY){
     
     //létrehozunk egy két dimenziós tömböt, amiben a matrix tömb összes indexét eltároljuk
-    const koordinatak = [];
+    const coordinates = [];
     for(let i = 0; i < x; i++){
         for(let j = 0; j < y; j++){
             if (i !== indexX || j !== indexY) { //első klikk koordináták, nem lehet bomba (indexX és indexY)
-                koordinatak.push([i, j]);
+                coordinates.push([i, j]);
             }
         }
     }
 
     //Fisher-Yates algoritmus
-    for(let i = koordinatak.length - 1; i > 0; i--){
+    for(let i = coordinates.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
-        [koordinatak[i], koordinatak[j]] = [koordinatak[j], koordinatak[i]];
+        [coordinates[i], coordinates[j]] = [coordinates[j], coordinates[i]];
     }
 
     //bombák véletlenszerű elhelyezése
-    for(let i = 0; i < bombakSzama; i++){
-        const [sor, oszlop] = koordinatak[i];
-        //console.log(koordinatak[i]);
-        matrix[sor][oszlop].bombaE = true;
+    for(let i = 0; i < bombCount; i++){
+        const [row, column] = coordinates[i];
+        matrix[row][column].isBomb = true;
     }
 
-    for(let i = 0; i < matrix.length; i++){
-        for(let j = 0; j < matrix[i].length; j++){
-            //console.log(matrix[i] [j].bombaE);
-        }
-    }
+    matrix = calculateBombsAroundCells(matrix);
 
-    //beszámozza a mezőket
-    for(let i = 0; i < matrix.length; i++){
-        for(let j = 0; j < matrix[i].length; j++){
-            if(matrix[i] [j].bombaE){//a bomba mezőket járja körbe és növeli az értékét
-                //bal felső mező
-                if(i - 1 >= 0 && i - 1 < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i - 1] [j - 1].bombaE){
-                    matrix[i - 1] [j - 1].mezokErteke++;
-                }
-                //felső mező
-                if(i - 1 >= 0 && i - 1 < matrix.length && j >= 0 && j < matrix[i].length && !matrix[i - 1] [j].bombaE){
-                    matrix[i - 1] [j].mezokErteke++;
-                }
-                 //jobb felső mező
-                 if(i - 1 >= 0 && i - 1 < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i - 1] [j + 1].bombaE){
-                    matrix[i - 1] [j + 1].mezokErteke++;
-                }
-                //job oldali mező
-                if(i >= 0 && i < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i] [j + 1].bombaE){
-                    matrix[i] [j + 1].mezokErteke++;
-                }
-                //jobb alsó mező
-                if(i + 1 >= 0 && i + 1 < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i + 1] [j + 1].bombaE){
-                    matrix[i + 1] [j + 1].mezokErteke++;
-                }
-                //alsó mező
-                if(i + 1 >= 0 && i + 1 < matrix.length && j >= 0 && j < matrix[i].length && !matrix[i + 1] [j].bombaE){
-                    matrix[i + 1] [j].mezokErteke++;
-                }
-                //bal alsó mező
-                if(i + 1 >= 0 && i + 1 < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i + 1] [j - 1].bombaE){
-                    matrix[i + 1] [j - 1].mezokErteke++;
-                }
-                //bal oldali mező
-                if(i >= 0 && i < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i] [j - 1].bombaE){
-                    matrix[i] [j - 1].mezokErteke++;
-                }
-            }
-        }
-    }
-
-    // for(let i = 0; i < matrix.length; i++){
-    //     let tesztString = "";
-    //     for(let j = 0; j < matrix[i].length; j++){
-    //         let mezokErtekeString = matrix[i] [j].bombaE ? "#" : matrix[i] [j].mezokErteke;
-    //         tesztString += mezokErtekeString + ", ";
-    //     }
-    //     console.log(tesztString);
-    // }
     return matrix;
 }
 
-function jatekIndit(){
-    emojiArcBeallitas('fa-face-smile');
-    idozitoNullazas();
-    palyaTisztitas();
-    palyaTomb = tombGeneral(x, y);
-    palyaGeneral(palyaTomb);
-    jatszikE = true;
-    zaszloKezdoAllapot();
-}
-
-function palyaGeneral(matrix){
-    const jatekTabla = document.getElementById('jatekTabla');
-    jatekTabla.innerHTML = '';
-
-    jatekTabla.style.display = 'grid';
-    jatekTabla.style.gridTemplateRows = `repeat(${matrix.length}, 40px)`; // Sorok számának dinamikus beállítása
-    jatekTabla.style.gridTemplateColumns = `repeat(${matrix[0].length}, 40px)`; // Oszlopok számának dinamikus beállítása
-    jatekTabla.style.width = '100%';
-    jatekTabla.style.height = '100%';
+//beszámozza a mezőket
+function calculateBombsAroundCells(matrix) {
     for(let i = 0; i < matrix.length; i++){
         for(let j = 0; j < matrix[i].length; j++){
-            const matrixAktualisEleme = matrix[i] [j];
-            const ujMezo = mezoKeszito(i, j, matrixAktualisEleme);//mezoKeszito metódus segítségével elkészítjük a mezőket
-            jatekTabla.appendChild(ujMezo);//feltölti a táblát mezőkkel
+            if(matrix[i] [j].isBomb){//a bomba mezőket járja körbe és növeli az értékét
+                //bal felső mező
+                if(i - 1 >= 0 && i - 1 < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i - 1] [j - 1].isBomb){
+                    matrix[i - 1] [j - 1].cellValue++;
+                }
+                //felső mező
+                if(i - 1 >= 0 && i - 1 < matrix.length && j >= 0 && j < matrix[i].length && !matrix[i - 1] [j].isBomb){
+                    matrix[i - 1] [j].cellValue++;
+                }
+                //jobb felső mező
+                if(i - 1 >= 0 && i - 1 < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i - 1] [j + 1].isBomb){
+                    matrix[i - 1] [j + 1].cellValue++;
+                }
+                //job oldali mező
+                if(i >= 0 && i < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i] [j + 1].isBomb){
+                    matrix[i] [j + 1].cellValue++;
+                }
+                //jobb alsó mező
+                if(i + 1 >= 0 && i + 1 < matrix.length && j + 1 >= 0 && j + 1 < matrix[i].length && !matrix[i + 1] [j + 1].isBomb){
+                    matrix[i + 1] [j + 1].cellValue++;
+                }
+                //alsó mező
+                if(i + 1 >= 0 && i + 1 < matrix.length && j >= 0 && j < matrix[i].length && !matrix[i + 1] [j].isBomb){
+                    matrix[i + 1] [j].cellValue++;
+                }
+                //bal alsó mező
+                if(i + 1 >= 0 && i + 1 < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i + 1] [j - 1].isBomb){
+                    matrix[i + 1] [j - 1].cellValue++;
+                }
+                //bal oldali mező
+                if(i >= 0 && i < matrix.length && j - 1 >= 0 && j - 1 < matrix[i].length && !matrix[i] [j - 1].isBomb){
+                    matrix[i] [j - 1].cellValue++;
+                }
+            }
         }
     }
-    jatekTabla.classList.add('tabla');
+
+    return matrix;
 }
 
-function mezoKeszito(x, y, mezo){
-    const kontenerDiv = document.createElement('div');
-    kontenerDiv.classList.add('mezo-kontener'); // új köztes div
+function startGame(){
+    setEmojiFace('fa-face-smile');
+    resetTimer();
+    resetBoard();
+    boardMatrix = generateMatrix(x, y);
+    generateBoard(boardMatrix);
+    isPlaying = true;
+    flagInitialization();
+}
 
-    const ujMezo = document.createElement('div');//mezok hozzáadása
-    ujMezo.dataset.indexX = x.toString();
-    ujMezo.dataset.indexY = y.toString();
-    ujMezo.classList.add('mezok');
-    
-    if(!mezo.felforditottE){
-        ujMezo.classList.add('leforditott');
+function generateBoard(matrix){
+    const gameBoard = document.getElementById('gameBoard');
+    gameBoard.innerHTML = '';
+
+    gameBoard.style.display = 'grid';
+    gameBoard.style.gridTemplateRows = `repeat(${matrix.length}, 40px)`; // Sorok számának dinamikus beállítása
+    gameBoard.style.gridTemplateColumns = `repeat(${matrix[0].length}, 40px)`; // Oszlopok számának dinamikus beállítása
+    gameBoard.style.width = '100%';
+    gameBoard.style.height = '100%';
+    for(let i = 0; i < matrix.length; i++){
+        for(let j = 0; j < matrix[i].length; j++){
+            const matrixCurrentElement = matrix[i] [j];
+            const newCell = createCell(i, j, matrixCurrentElement);//createCell metódus segítségével elkészítjük a mezőket
+            gameBoard.appendChild(newCell);//feltölti a táblát mezőkkel
+        }
     }
-    ujMezo.addEventListener('click', (event)=>{//Klikkelés lekezelése szám mezőnél, bombánál és üres mezőnél
-        if(!jatszikE){//ha nem játszik, ne működjenek az event listener-ek
+    gameBoard.classList.add('board');
+}
+
+function createCell(x, y, cell){
+    const containerDiv = document.createElement('div');
+    containerDiv.classList.add('cell-container'); // új köztes div
+
+    const newCell = document.createElement('div');//mezok hozzáadása
+    newCell.dataset.indexX = x.toString();
+    newCell.dataset.indexY = y.toString();
+    newCell.classList.add('cell');
+    
+    if(!cell.isRevealed){
+        newCell.classList.add('faceDown');
+    }
+    newCell.addEventListener('click', (event)=>{//Klikkelés lekezelése szám mezőnél, bombánál és üres mezőnél
+        if(!isPlaying){//ha nem játszik, ne működjenek az event listener-ek
             return;
         }
-        if(ujMezo.classList.contains('zaszlo')){//ha zászló van rajta bal kattintás nem lehetséges
+        if(newCell.classList.contains('flag')){//ha zászló van rajta bal kattintás nem lehetséges
             return;
         }
-        mezo.felforditottE = true;
+        cell.isRevealed = true;
         const indexX = parseInt(event.target.dataset.indexX); //aktuális mező koordinátájának elmentése
         const indexY = parseInt(event.target.dataset.indexY);
         console.log(indexX, indexY);
-        ujMezo.classList.remove('leforditott');
-        if(!elsoKattintasTortentE){
-            palyaTomb = palyaFeltoltes(palyaTomb, indexX, indexY);
-            elsoKattintasTortentE = true;
-            if(!zeneElsoMegallitasTortentE) {
-                zeneLejatszas();
+        newCell.classList.remove('faceDown');
+        if(!isFirstClickHappened){
+            boardMatrix = fillBoard(boardMatrix, indexX, indexY);
+            isFirstClickHappened = true;
+            if(!isFirstMusicStoppingHappened) {
+                playMusic();
             }
 
-            idozito();
+            timer();
         }
-        if(mezo.bombaE){
-            ujMezo.classList.add('bomba');
-            bombaKattint(indexX, indexY);
+        if(cell.isBomb){
+            newCell.classList.add('bomb');
+            onBombClick(indexX, indexY);
         }
-        else if(mezo.mezokErteke !== 0){
-            ujMezo.classList.add('szam');
-            ujMezo.innerText = mezo.mezokErteke;
-            nyert();
+        else if(cell.cellValue !== 0){
+            newCell.classList.add('number');
+            newCell.innerText = cell.cellValue;
+            checkWin();
         }
         else{
-            mezo.felforditottE = false;
-            uresKattint(indexX, indexY);
+            cell.isRevealed = false;
+            emptyCellClick(indexX, indexY);
         }
     })
 
-    ujMezo.addEventListener('contextmenu', (event)=>{//jobb klikkel zászló felrakása a mezőre, ha fent van még egy jobb klikkel le lehet venni
+    newCell.addEventListener('contextmenu', (event)=>{//jobb klikkel zászló felrakása a mezőre, ha fent van még egy jobb klikkel le lehet venni
         event.preventDefault();
         const indexX = parseInt(event.target.dataset.indexX); //aktuális mező koordinátájának elmentése
         const indexY = parseInt(event.target.dataset.indexY);
-        let csokkentsukE = true;
-        if(!jatszikE){//ha nem játszik, ne működjenek az event listener-ek
+        let shouldDecrease = true;
+        if(!isPlaying){//ha nem játszik, ne működjenek az event listener-ek
             return;
         }
-        if(!elsoKattintasTortentE){
-            if(!zeneElsoMegallitasTortentE) {
-                zeneLejatszas();
+        if(!isFirstClickHappened){
+            if(!isFirstMusicStoppingHappened) {
+                playMusic();
             }
-            idozito();
+            timer();
         }
-        if (!mezo.felforditottE) {
-            if (!palyaTomb[indexX][indexY].zaszlosE) {
-                csokkentsukE = true;
-                zaszloSzamlalo(csokkentsukE, indexX, indexY);
-                if(elsoKattintasTortentE){
-                    nyert();
+        if (!cell.isRevealed) {
+            if (!boardMatrix[indexX][indexY].isFlagged) {
+                shouldDecrease = true;
+                flagHandler(shouldDecrease, indexX, indexY);
+                if(isFirstClickHappened){
+                    checkWin();
                 }
             }
             else
             {
-                csokkentsukE = false;
-                zaszloSzamlalo(csokkentsukE, indexX, indexY);
+                shouldDecrease = false;
+                flagHandler(shouldDecrease, indexX, indexY);
             }
         }
     })
-    kontenerDiv.appendChild(ujMezo);
-    return kontenerDiv;
+    containerDiv.appendChild(newCell);
+    return containerDiv;
 }
 
-function bombaKattint(x, y){
-    jatszikE = false; //játék vége
-    for(let i = 0; i < palyaTomb.length; i++){
-        for(let j = 0; j < palyaTomb[i].length; j++){
-            const mezo = palyaTomb[i][j];
-            if(mezo.bombaE){
-                const elem = elementLekereseIndexekkel(i, j);
-                if (!mezo.zaszlosE){
-                    elem.classList.remove('leforditott');
-                    elem.classList.add('bomba');
+function onBombClick(x, y){
+    isPlaying = false; //játék vége
+    for(let i = 0; i < boardMatrix.length; i++){
+        for(let j = 0; j < boardMatrix[i].length; j++){
+            const cell = boardMatrix[i][j];
+            if(cell.isBomb){
+                const element = getElementByIndexes(i, j);
+                if (!cell.isFlagged){
+                    element.classList.remove('faceDown');
+                    element.classList.add('bomb');
                     if(i == x && j == y){
-                        elem.classList.add('aBomba'); //az a bomba amire először kattintottunk, így külön lehet formázni
-                        elem.classList.remove('bomba');
+                        element.classList.add('firstBomb'); //az a bomba amire először kattintottunk, így külön lehet formázni
+                        element.classList.remove('bomb');
                     }
                 }
             }
         }
     }
-    for(let i = 0; i < palyaTomb.length; i++){ //vesztéskor a korábban tévesen lerakott zászlók pirosan jelennek meg
-        for(let j = 0; j < palyaTomb[i].length; j++){
-            const mezo = palyaTomb[i][j];
-            if(mezo.zaszlosE){
-                if(!mezo.bombaE){
-                    const tevesZaszlo = elementLekereseIndexekkel(i, j);
-                    tevesZaszlo.classList.add('tevesZaszlo');
+    for(let i = 0; i < boardMatrix.length; i++){ //vesztéskor a korábban tévesen lerakott zászlók pirosan jelennek meg
+        for(let j = 0; j < boardMatrix[i].length; j++){
+            const cell = boardMatrix[i][j];
+            if(cell.isFlagged){
+                if(!cell.isBomb){
+                    const wrongFlagCell = getElementByIndexes(i, j);
+                    wrongFlagCell.classList.add('wrongFlag');
                 }
             }
         }
     }
 
     //pointer és hover eltávolítása
-    for(let i = 0; i < palyaTomb.length; i++){
-        for(let j = 0; j < palyaTomb[i].length; j++){
-            const mezo = palyaTomb[i][j];
-            if(!mezo.felforditottE){
-                const leforditott = elementLekereseIndexekkel(i, j);
-                leforditott.style.pointerEvents = "none";
+    for(let i = 0; i < boardMatrix.length; i++){
+        for(let j = 0; j < boardMatrix[i].length; j++){
+            const cell = boardMatrix[i][j];
+            if(!cell.isRevealed){
+                const faceDownCell = getElementByIndexes(i, j);
+                faceDownCell.style.pointerEvents = "none";
             }
         }
     }
 
-    modalMutatElrejt(true, 'vesztettel');
-    emojiArcBeallitas('fa-face-tired');
-    idozitoMegallitas();
+    modalShowHide(true, 'lost');
+    setEmojiFace('fa-face-tired');
+    stopTimer();
 }
 
 //megjeleníti, vagy elrejti a megadott modal-t és a főtárolót
-function modalMutatElrejt(mutat, modalTaroloNev) { //fadeIn és fadeOut animációval megjeleníti a nyertes/vesztes modal-t
+function modalShowHide(isShown, modalContainerName) { //fadeIn és fadeOut animációval megjeleníti a nyertes/vesztes modal-t
 
-    const modalTarolo = document.getElementById(modalTaroloNev);
-    const foTarolo = document.getElementById('foTarolo');
-    const focim = document.getElementById('focim');
+    const modalContainer = document.getElementById(modalContainerName);
+    const mainContainer = document.getElementById('mainContainer');
+    const mainTitle = document.getElementById('mainTitle');
 
-    if (!modalTarolo) {
+    if (!modalContainer) {
         return;
     }
 
-    if (!mutat) { // modalTarolo elrejtese
-        modalTarolo.classList.remove('popup-scale-in');
+    if (!isShown) { // modalTarolo elrejtese
+        modalContainer.classList.remove('popup-scale-in');
         setTimeout(() => {
-            foTarolo.classList.add('fade-in');
-            focim.classList.add('fade-in');
-            foTarolo.classList.remove('fade-out');
-            focim.classList.remove('fade-out');
+            mainContainer.classList.add('fade-in');
+            mainTitle.classList.add('fade-in');
+            mainContainer.classList.remove('fade-out');
+            mainTitle.classList.remove('fade-out');
         }, 150);
 
         setTimeout(() => {
-            modalTarolo.classList.remove('active');
+            modalContainer.classList.remove('active');
         }, 300);
 
     } else { //modalTarolo megjelenítése
-        modalTarolo.classList.add('active');
+        modalContainer.classList.add('active');
         requestAnimationFrame(() => {
-            foTarolo.classList.remove('fade-in');
-            focim.classList.remove('fade-in');
-            modalTarolo.classList.add('popup-scale-in');
-            foTarolo.classList.add('fade-out');
-            focim.classList.add('fade-out');
+            mainContainer.classList.remove('fade-in');
+            mainTitle.classList.remove('fade-in');
+            modalContainer.classList.add('popup-scale-in');
+            mainContainer.classList.add('fade-out');
+            mainTitle.classList.add('fade-out');
         });
 
         //kattintás esetén eltűnik
-        modalTarolo.addEventListener('click', (event)=>{
-            modalMutatElrejt(false, modalTaroloNev);
+        modalContainer.addEventListener('click', (event)=>{
+            modalShowHide(false, modalContainerName);
         });
 
         // modal automatikus eltüntetése idővel
         setTimeout(() =>{
-            modalMutatElrejt(false, modalTaroloNev);
+            modalShowHide(false, modalContainerName);
         }, 3000)
     }
 }
 
-function elementLekereseIndexekkel(x, y){ //tömb adott eleméhez tartozó HTML element lekérdezése
-    const elem = document.querySelector(`[data-index-x="${x}"][data-index-y="${y}"]`);
-    return elem;
+function getElementByIndexes(x, y){ //tömb adott eleméhez tartozó HTML element lekérdezése
+    const element = document.querySelector(`[data-index-x="${x}"][data-index-y="${y}"]`);
+    return element;
 }
 
 
-function nyert(){
-    let nyertEFelfedve = true;
-    let nyertEZaszlokkal = true;
-    let nincsTevesZaszlo = true;
-    for(let i = 0; i < palyaTomb.length; i++){
-        for(let j = 0; j < palyaTomb[i].length; j++){
-            const mezo = palyaTomb[i][j];
-            if(mezo.bombaE && !mezo.zaszlosE){//van-e olyan mező, ami bomba, de nincs rajta zászló
-                nyertEZaszlokkal = false;
+function checkWin(){
+    let wonByReveal = true;
+    let wonByFlags = true;
+    let noIncorrectFlag = true;
+    for(let i = 0; i < boardMatrix.length; i++){
+        for(let j = 0; j < boardMatrix[i].length; j++){
+            const cell = boardMatrix[i][j];
+            if(cell.isBomb && !cell.isFlagged){//van-e olyan mező, ami bomba, de nincs rajta zászló
+                wonByFlags = false;
             }
-            if(!mezo.bombaE && !mezo.felforditottE){//van-e olyan mező, ami bomba, de nincs felfordítva
-                nyertEFelfedve = false;
+            if(!cell.isBomb && !cell.isRevealed){//van-e olyan mező, ami bomba, de nincs felfordítva
+                wonByReveal = false;
             }
-            if (!mezo.bombaE && mezo.zaszlosE) {//van-e olyan mező, ami nem bomba, de van rajta zászló
-                nincsTevesZaszlo = false;
+            if (!cell.isBomb && cell.isFlagged) {//van-e olyan mező, ami nem bomba, de van rajta zászló
+                noIncorrectFlag = false;
             }
         }
     }
 
-    if(nyertEFelfedve || (nyertEZaszlokkal && nincsTevesZaszlo)){ //ha minden zaszló alatt bomba van, vagy ha minden nem akna fel van fedve nyer a felhasználó
-        jatszikE = false;
-        modalMutatElrejt(true, 'nyertel');
-        emojiArcBeallitas('fa-face-laugh-beam');
-        idozitoMegallitas();
+    if(wonByReveal || (wonByFlags && noIncorrectFlag)){ //ha minden zaszló alatt bomba van, vagy ha minden nem akna fel van fedve nyer a felhasználó
+        isPlaying = false;
+        modalShowHide(true, 'won');
+        setEmojiFace('fa-face-laugh-beam');
+        stopTimer();
     }
 }
 
-function zaszloKezdoAllapot(){ //zaszlo számláló inicializálása
-    zaszlokSzama = bombakSzama;
-    const zaszlok = document.createElement('div'); //zaszló számláló div
-    zaszlok.textContent = zaszlokSzama; //megadom az értékét
-    zaszlok.classList.add('zaszloSzamol');
-    const zaszloTarolo = document.getElementsByClassName('zaszlo-tarolo')[0];
-    zaszloTarolo.insertBefore(zaszlok, zaszloTarolo.children[1]);
+function flagInitialization(){ //zaszlo számláló inicializálása
+    flagsCount = bombCount;
+    const flagsCounter = document.createElement('div'); //zaszló számláló div
+    flagsCounter.textContent = flagsCount; //megadom az értékét
+    flagsCounter.classList.add('flags-counter');
+    const flagContainer = document.getElementsByClassName('flags-container')[0];
+    flagContainer.insertBefore(flagsCounter, flagContainer.children[1]);
 }
 
-function zaszloSzamlalo(csokkentsukE, indexX, indexY){ //zaszló kezelés
-    const ujMezo = elementLekereseIndexekkel(indexX, indexY);
-    if(csokkentsukE){
-        if(zaszlokSzama >= 1){
-            ujMezo.classList.add('zaszlo'); // Hozzáadja a zászlót
+function flagHandler(shouldDecrease, indexX, indexY){ //zaszló kezelés
+    const newCell = getElementByIndexes(indexX, indexY);
+    if(shouldDecrease){
+        if(flagsCount >= 1){
+            newCell.classList.add('flag'); // Hozzáadja a zászlót
             
-            palyaTomb[indexX][indexY].zaszlosE = true;
+            boardMatrix[indexX][indexY].isFlagged = true;
 
-            zaszlokSzama--;
-            const zaszlok = document.getElementsByClassName('zaszloSzamol');
-            zaszlok[0].textContent = zaszlokSzama;
+            flagsCount--;
+            const flagsCounter = document.getElementsByClassName('flags-counter');
+            flagsCounter[0].textContent = flagsCount;
         }
     }
     else
     {
-        if(zaszlokSzama < bombakSzama){
-            ujMezo.classList.remove('zaszlo'); // Ha már van zászló, eltávolítja
-            //ujMezo.classList.add('leforditott');
+        if(flagsCount < bombCount){
+            newCell.classList.remove('flag'); // Ha már van zászló, eltávolítja
+            //ujMezo.classList.add('faceDown');
 
-            palyaTomb[indexX][indexY].zaszlosE = false;
+            boardMatrix[indexX][indexY].isFlagged = false;
 
-            zaszlokSzama++;
-            const zaszlok = document.getElementsByClassName('zaszloSzamol');
-            zaszlok[0].textContent = zaszlokSzama;
+            flagsCount++;
+            const flagsCounter = document.getElementsByClassName('flags-counter');
+            flagsCounter[0].textContent = flagsCount;
         }
     }
 }
 
-function uresKattint(x, y){ //kezeli az üres mezőre kattintást
-    let ellenorizendoElemek = [];
-    ellenorizendoElemek.push({x, y});
+function emptyCellClick(x, y){ //kezeli az üres mezőre kattintást
+    let cellsToCheck = [];
+    cellsToCheck.push({x, y});
 
-    for (let i = 0; i < ellenorizendoElemek.length; i++) {
-        const aktElem = ellenorizendoElemek[i];
-        let ujElemek = uresKattintKornyezoMezok(aktElem.x,  aktElem.y);
-        ellenorizendoElemek.push(...ujElemek);
+    for (let i = 0; i < cellsToCheck.length; i++) {
+        const currentCell = cellsToCheck[i];
+        let newCells = emptyClickAdjacentCells(currentCell.x,  currentCell.y);
+        cellsToCheck.push(...newCells);
     }
-    nyert();
+    checkWin();
 }
 
-function uresKattintKornyezoMezok(x, y) { //felfedi az aktuális mezőt, ha nem bomba és nincs felfordítva és, ha üres akkor lekéri a környező mezőket
-    let ujEllenorizendoElemek = [];
+function emptyClickAdjacentCells(x, y) { //felfedi az aktuális mezőt, ha nem bomba és nincs felfordítva és, ha üres akkor lekéri a környező mezőket
+    let newCellsToCheck = [];
 
-    if(palyaTomb[x][y].felforditottE){
-        return ujEllenorizendoElemek;
+    if(boardMatrix[x][y].isRevealed){
+        return newCellsToCheck;
     }
-    else if (palyaTomb[x][y].bombaE){
-        return ujEllenorizendoElemek;
+    else if (boardMatrix[x][y].isBomb){
+        return newCellsToCheck;
     }
-    else if(palyaTomb[x][y].mezokErteke > 0 && palyaTomb[x][y].mezokErteke < 9){
-        felfed(x, y);
-        return ujEllenorizendoElemek;
+    else if(boardMatrix[x][y].cellValue > 0 && boardMatrix[x][y].cellValue < 9){
+        reveal(x, y);
+        return newCellsToCheck;
     }
     else{
-        felfed(x, y);
-        ujEllenorizendoElemek = kornyezoMezokLekerese(x,y, palyaTomb);
+        reveal(x, y);
+        newCellsToCheck = getAdjacentCells(x,y, boardMatrix);
     }
 
-    return ujEllenorizendoElemek;
+    return newCellsToCheck;
 }
 
-function felfed(x, y) { //felfedi az aktuális mezőt, hogy ha nem bomba és nem zászló
-    let palyaAktEleme = palyaTomb[x][y];
+function reveal(x, y) { //felfedi az aktuális mezőt, hogy ha nem bomba és nem zászló
+    let currentCell = boardMatrix[x][y];
 
     // ha bomba, vagy zászló nem fut tovább a metódus
-    if (palyaAktEleme.bombaE || palyaAktEleme.zaszlosE) {
+    if (currentCell.isBomb || currentCell.isFlagged) {
         return;
     }
 
-    const mezo = elementLekereseIndexekkel(x, y);
+    const cellElement = getElementByIndexes(x, y);
 
-    if (palyaAktEleme.mezokErteke !== 0) {
-        mezo.classList.add('szam');
-        mezo.innerText = palyaAktEleme.mezokErteke;
+    if (currentCell.cellValue !== 0) {
+        cellElement.classList.add('number');
+        cellElement.innerText = currentCell.cellValue;
     } else {
-        mezo.classList.add('ures');
+        cellElement.classList.add('empty');
     }
 
-    mezo.classList.remove('leforditott')
-    palyaAktEleme.felforditottE = true;
+    cellElement.classList.remove('faceDown')
+    currentCell.isRevealed = true;
 }
 
-function kornyezoMezokLekerese(x,y, matrix) { //visszatér a környező mezőkkel, amelyek nem zászlók és nem aknák
-    let kornyezoMezok = [];
+function getAdjacentCells(x,y, matrix) { //visszatér a környező mezőkkel, amelyek nem zászlók és nem aknák
+    let adjacentCells = [];
 
     //bal felső mező
-    if(x - 1 >= 0 && x - 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x - 1] [y - 1].bombaE && !matrix[x - 1] [y - 1].bombaE.felforditottE && !matrix[x - 1] [y - 1].bombaE.zaszlosE){
-        kornyezoMezok.push({
+    if(x - 1 >= 0 && x - 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x - 1] [y - 1].isBomb && !matrix[x - 1] [y - 1].isBomb.isRevealed && !matrix[x - 1] [y - 1].isBomb.isFlagged){
+        adjacentCells.push({
             x: x - 1, y: y - 1
         });
     }
     //felső mező
-    if(x - 1 >= 0 && x - 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x - 1] [y].bombaE && !matrix[x - 1] [y].felforditottE && !matrix[x - 1] [y].zaszlosE){
-        kornyezoMezok.push({
+    if(x - 1 >= 0 && x - 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x - 1] [y].isBomb && !matrix[x - 1] [y].isRevealed && !matrix[x - 1] [y].isFlagged){
+        adjacentCells.push({
             x: x - 1, y: y
         });
     }
     //jobb felső mező
-    if(x - 1 >= 0 && x - 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x - 1] [y + 1].bombaE && !matrix[x - 1] [y + 1].felforditottE && !matrix[x - 1] [y + 1].zaszlosE){
-        kornyezoMezok.push({
+    if(x - 1 >= 0 && x - 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x - 1] [y + 1].isBomb && !matrix[x - 1] [y + 1].isRevealed && !matrix[x - 1] [y + 1].isFlagged){
+        adjacentCells.push({
             x: x - 1, y: y + 1
         });
     }
     //job oldali mező
-    if(x >= 0 && x < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x] [y + 1].bombaE && !matrix[x] [y + 1].felforditottE && !matrix[x] [y + 1].zaszlosE){
-        kornyezoMezok.push({
+    if(x >= 0 && x < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x] [y + 1].isBomb && !matrix[x] [y + 1].isRevealed && !matrix[x] [y + 1].isFlagged){
+        adjacentCells.push({
             x: x, y: y + 1
         });
     }
     //jobb alsó mező
-    if(x + 1 >= 0 && x + 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x + 1] [y + 1].bombaE && !matrix[x + 1] [y + 1].felforditottE && !matrix[x + 1] [y + 1].zaszlosE){
-        kornyezoMezok.push({
+    if(x + 1 >= 0 && x + 1 < matrix.length && y + 1 >= 0 && y + 1 < matrix[x].length && !matrix[x + 1] [y + 1].isBomb && !matrix[x + 1] [y + 1].isRevealed && !matrix[x + 1] [y + 1].isFlagged){
+        adjacentCells.push({
             x: x + 1, y: y + 1
         });
     }
     //alsó mező
-    if(x + 1 >= 0 && x + 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x + 1] [y].bombaE && !matrix[x + 1] [y].felforditottE && !matrix[x + 1] [y].zaszlosE){
-        kornyezoMezok.push({
+    if(x + 1 >= 0 && x + 1 < matrix.length && y >= 0 && y < matrix[x].length && !matrix[x + 1] [y].isBomb && !matrix[x + 1] [y].isRevealed && !matrix[x + 1] [y].isFlagged){
+        adjacentCells.push({
             x: x + 1, y: y
         });
     }
     //bal alsó mező
-    if(x + 1 >= 0 && x + 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x + 1] [y - 1].bombaE && !matrix[x + 1] [y - 1].felforditottE && !matrix[x + 1] [y - 1].zaszlosE){
-        kornyezoMezok.push({
+    if(x + 1 >= 0 && x + 1 < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x + 1] [y - 1].isBomb && !matrix[x + 1] [y - 1].isRevealed && !matrix[x + 1] [y - 1].isFlagged){
+        adjacentCells.push({
             x: x + 1, y: y - 1
         });
     }
     //bal oldali mező
-    if(x >= 0 && x < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x] [y - 1].bombaE && !matrix[x] [y - 1].felforditottE && !matrix[x] [y - 1].zaszlosE){
-        kornyezoMezok.push({
+    if(x >= 0 && x < matrix.length && y - 1 >= 0 && y - 1 < matrix[x].length && !matrix[x] [y - 1].isBomb && !matrix[x] [y - 1].isRevealed && !matrix[x] [y - 1].isFlagged){
+        adjacentCells.push({
             x: x, y: y - 1
         });
     }
 
-    return kornyezoMezok;
+    return adjacentCells;
 }
 
-function jatekszabalyzat() { //beállítja a játék szabályzathoz kapcsolódó event listener-eket
-    const jatekszabalyzatTarolo = document.getElementById('jatekszabalyzatTarolo');
-    const jatekSzabalyzatGomb = document.getElementById('jatekSzabalyzatGomb');
-    const jatekszabalyzat = document.getElementById('jatekszabalyzat');
+function gameRules() { //beállítja a játék szabályzathoz kapcsolódó event listener-eket
+    const gameRulesContainer = document.getElementById('gameRulesContainer');
+    const gameRulesButton = document.getElementById('gameRulesButton');
+    const gameRules = document.getElementById('gameRules');
 
-    jatekSzabalyzatGomb.addEventListener('click', (event) => {
-        modalMutatElrejtAnimacioval(true, 'jatekszabalyzatTarolo');
+    gameRulesButton.addEventListener('click', (event) => {
+        modalShowHideWithAnimation(true, 'gameRulesContainer');
     })
 
-    jatekszabalyzatTarolo.addEventListener('click', (event) => {
-        modalMutatElrejtAnimacioval(false, 'jatekszabalyzatTarolo');
+    gameRulesContainer.addEventListener('click', (event) => {
+        modalShowHideWithAnimation(false, 'gameRulesContainer');
     })
 
-    jatekszabalyzat.addEventListener('click', (event) => {
+    gameRules.addEventListener('click', (event) => {
         event.stopPropagation();
     })
 
-    const jatekszabalyzatBezaras = document.getElementById('jatekszabalyzatBezaras');
-    jatekszabalyzatBezaras.addEventListener('click', (event) => {
-        modalMutatElrejtAnimacioval(false, 'jatekszabalyzatTarolo');
+    const gameRulesClose = document.getElementById('gameRulesClose');
+    gameRulesClose.addEventListener('click', (event) => {
+        modalShowHideWithAnimation(false, 'gameRulesContainer');
     })
 }
 
-function szintek(){ //beállítja a szint választóhoz kapcsolódó event listener-eket
-    const kezdo = document.getElementById('kezdo');
-    kezdo.addEventListener('click', (event)=>{
+function levels(){ //beállítja a szint választóhoz kapcsolódó event listener-eket
+    const beginner = document.getElementById('beginner');
+    beginner.addEventListener('click', (event)=>{
         x = 9;
         y = 9;
-        jatekIndit();
+        startGame();
     })
 
-    const halado = document.getElementById('halado');
-    halado.addEventListener('click', (event)=>{
+    const advanced = document.getElementById('advanced');
+    advanced.addEventListener('click', (event)=>{
         x = 16;
         y = 16;
-        jatekIndit();
+        startGame();
     })
 
-    const szakerto = document.getElementById('szakerto');
-    szakerto.addEventListener('click', (event)=>{
+    const expert = document.getElementById('expert');
+    expert.addEventListener('click', (event)=>{
         x = 16;
         y = 30;
-        jatekIndit();
+        startGame();
     })
 
-    const szintValasztoGomb = document.getElementById('szintValasztoGomb');
-    const szintValaszto = document.getElementById('szintValaszto');
-    const szintek = document.getElementById('szintek');
+    const levelSelectorButton = document.getElementById('levelSelectorButton');
+    const levelSelector = document.getElementById('levelSelector');
+    const levels = document.getElementById('levels');
 
     // bezarodik, ha a modalon kívűl kattint
-    szintValaszto.addEventListener('click', (event) => {
-        modalMutatElrejtAnimacioval(false, 'szintValaszto');
+    levelSelector.addEventListener('click', (event) => {
+        modalShowHideWithAnimation(false, 'levelSelector');
     })
 
     // meggátolja, hogy bezárodojon, ha a modalra rákattint
-    szintek.addEventListener('click', (event) => {
+    levels.addEventListener('click', (event) => {
         event.stopPropagation();
     })
 
-    szintValasztoGomb.addEventListener('click', (event) => {
-        modalMutatElrejtAnimacioval(true, 'szintValaszto');
+    levelSelectorButton.addEventListener('click', (event) => {
+        modalShowHideWithAnimation(true, 'levelSelector');
     })//a szintválasztó gomb megnyomásával megjelennek a szintek gombjai
 
-    const kezdoGomb = document.getElementById('kezdo');//ez a 3 eventlistener azt kezeli le, hogy mikor, melyik szint gombjai menjenek
-    kezdoGomb.addEventListener('click', (event) => {
-        kezdoGomb.disabled = true;
-        haladoGomb.disabled = false;
-        szakertoGomb.disabled = false;
-        modalMutatElrejtAnimacioval(false, 'szintValaszto');
+    const beginnerButton = document.getElementById('beginner');//ez a 3 eventlistener azt kezeli le, hogy mikor, melyik szint gombjai menjenek
+    beginnerButton.addEventListener('click', (event) => {
+        beginnerButton.disabled = true;
+        advancedButton.disabled = false;
+        expertButton.disabled = false;
+        modalShowHideWithAnimation(false, 'levelSelector');
     })
 
-    const haladoGomb = document.getElementById('halado');
-    haladoGomb.addEventListener('click', (event) => {
-        haladoGomb.disabled = true;
-        kezdoGomb.disabled = false;
-        szakertoGomb.disabled = false;
-        modalMutatElrejtAnimacioval(false, 'szintValaszto');
+    const advancedButton = document.getElementById('advanced');
+    advancedButton.addEventListener('click', (event) => {
+        advancedButton.disabled = true;
+        beginnerButton.disabled = false;
+        expertButton.disabled = false;
+        modalShowHideWithAnimation(false, 'levelSelector');
     })
 
-    const szakertoGomb = document.getElementById('szakerto');
-    szakertoGomb.addEventListener('click', (event) => {
-        szakertoGomb.disabled = true;
-        haladoGomb.disabled = false;
-        kezdoGomb.disabled = false;
-        modalMutatElrejtAnimacioval(false, 'szintValaszto');
+    const expertButton = document.getElementById('expert');
+    expertButton.addEventListener('click', (event) => {
+        expertButton.disabled = true;
+        advancedButton.disabled = false;
+        beginnerButton.disabled = false;
+        modalShowHideWithAnimation(false, 'levelSelector');
     })
 
-    const szintekBezaras = document.getElementById('szintekBezaras');
-    szintekBezaras.addEventListener('click', (event) => {
-        modalMutatElrejtAnimacioval(false, 'szintValaszto');
+    const levelsClose = document.getElementById('levelsClose');
+    levelsClose.addEventListener('click', (event) => {
+        modalShowHideWithAnimation(false, 'levelSelector');
     })
 }
 
-function modalMutatElrejtAnimacioval(mutat, modalTaroloNev) { //szint választó és a játék szabályzat animáció kezelése
-    const modalTarolo = document.getElementById(modalTaroloNev);
-    const foTarolo = document.getElementById('foTarolo');
-    const focim = document.getElementById('focim');
+function modalShowHideWithAnimation(isShown, modalContainerName) { //szint választó és a játék szabályzat animáció kezelése
+    const modalContainer = document.getElementById(modalContainerName);
+    const mainContainer = document.getElementById('mainContainer');
+    const mainTitle = document.getElementById('mainTitle');
 
-    if (!mutat) { // modalTarolo elrejtese
-        modalTarolo.classList.remove('popup-scale-in');
+    if (!isShown) { // modalTarolo elrejtese
+        modalContainer.classList.remove('popup-scale-in');
         setTimeout(() => {
-            foTarolo.classList.add('fade-in');
-            focim.classList.add('fade-in');
-            foTarolo.classList.remove('fade-out');
-            focim.classList.remove('fade-out');
+            mainContainer.classList.add('fade-in');
+            mainTitle.classList.add('fade-in');
+            mainContainer.classList.remove('fade-out');
+            mainTitle.classList.remove('fade-out');
         }, 150);
 
         setTimeout(() => {
-            modalTarolo.classList.remove('active');
+            modalContainer.classList.remove('active');
         }, 300);
 
     } else { //modalTarolo megjelenitese
-        modalTarolo.classList.add('active');
+        modalContainer.classList.add('active');
         setTimeout(() => {
-            foTarolo.classList.remove('fade-in');
-            focim.classList.remove('fade-in');
-            modalTarolo.classList.add('popup-scale-in');
-            foTarolo.classList.add('fade-out');
-            focim.classList.add('fade-out');
+            mainContainer.classList.remove('fade-in');
+            mainTitle.classList.remove('fade-in');
+            modalContainer.classList.add('popup-scale-in');
+            mainContainer.classList.add('fade-out');
+            mainTitle.classList.add('fade-out');
         }, 0);
     }
 }
 
-function palyaTisztitas(){ //alap állapotba állítja a játékot
-    bombakSzama = 0;
-    zaszlokSzama = 0;
-    jatszikE = false;
-    elsoKattintasTortentE = false;
-    palyaTomb = [];
-    const zaszlok = document.getElementsByClassName('zaszloSzamol');
-    if(zaszlok && zaszlok.length > 0){
-        zaszlok[0].remove();
+function resetBoard(){ //alap állapotba állítja a játékot
+    bombCount = 0;
+    flagsCount = 0;
+    isPlaying = false;
+    isFirstClickHappened = false;
+    boardMatrix = [];
+    const flagsCounter = document.getElementsByClassName('flags-counter');
+    if(flagsCounter && flagsCounter.length > 0){
+        flagsCounter[0].remove();
     }
-    modalMutatElrejt(false, 'vesztettel');
-    modalMutatElrejt(false, 'nyertel');
+    modalShowHide(false, 'lost');
+    modalShowHide(false, 'won');
 }
 
-function idozito() { //létrehozza és elindítja az időzítőt
-    if (intervallum) {
-        idozitoNullazas();
+function timer() { //létrehozza és elindítja az időzítőt
+    if (interval) {
+        resetTimer();
     }
 
-    const kezdoIdo = Date.now();
+    const startTime = Date.now();
 
-    intervallum = setInterval(function() {
-        const elteltEzredMasodpercek = Date.now() - kezdoIdo;
-        const elteltMasodpercek = Math.floor(elteltEzredMasodpercek / 1000);
+    interval = setInterval(function() {
+        const passedMilliseconds = Date.now() - startTime;
+        const passedSeconds = Math.floor(passedMilliseconds / 1000);
 
-        let masodpercek = elteltMasodpercek % 60;
-        let percek = (elteltMasodpercek - masodpercek)/60;
+        let seconds = passedSeconds % 60;
+        let minutes = (passedSeconds - seconds)/60;
 
-        if (masodpercek < 10) {
-            masodpercek = "0" + masodpercek;
+        if (seconds < 10) {
+            seconds = "0" + seconds;
         }
 
-        if (percek < 10) {
-            percek = "0" + percek;
+        if (minutes < 10) {
+            minutes = "0" + minutes;
         }
 
-        const szamlalo = document.getElementById('szamlalo');
-        szamlalo.textContent = `${percek}:${masodpercek}`;
+        const timer = document.getElementById('timer');
+        timer.textContent = `${minutes}:${seconds}`;
 
     }, 100)
 }
 
-function idozitoNullazas() { //alapállapotba állítja az időzítőt
-    idozitoMegallitas();
-    const szamlalo = document.getElementById('szamlalo');
-    szamlalo.textContent = "00:00";
+function resetTimer() { //alapállapotba állítja az időzítőt
+    stopTimer();
+    const timer = document.getElementById('timer');
+    timer.textContent = "00:00";
 }
 
-function idozitoMegallitas() { //megállítja az időzítőt
-    clearInterval(intervallum);
+function stopTimer() { //megállítja az időzítőt
+    clearInterval(interval);
 }
 
-function zeneLejatszas() { //elindítja a zenét és a hozzátartozó animációt
-  zene.play();
-  zeneFolyamatbanVanE = true;
-  const korok = document.getElementsByClassName('kazetta-kor');
-  for (let i = 0; i < korok.length; i++) {
-      korok[i].classList.add('kazetta-forgatas');
+function playMusic() { //elindítja a zenét és a hozzátartozó animációt
+  music.play();
+  isMusicPlaying = true;
+  const cassetteWheels = document.getElementsByClassName('cassette-wheel');
+  for (let i = 0; i < cassetteWheels.length; i++) {
+      cassetteWheels[i].classList.add('cassette-wheel-rotate');
   }
 } 
 
-function zeneMegallitas() { //megállítja a zenét és a hozzátartozó animációt
-  zeneElsoMegallitasTortentE = true; 
-  zene.pause();
-  zeneFolyamatbanVanE = false;
-    const korok = document.getElementsByClassName('kazetta-kor');
-    for (let i = 0; i < korok.length; i++) {
-        korok[i].classList.remove('kazetta-forgatas');
+function stopMusic() { //megállítja a zenét és a hozzátartozó animációt
+  isFirstMusicStoppingHappened = true;
+  music.pause();
+  isMusicPlaying = false;
+    const cassetteWheels = document.getElementsByClassName('cassette-wheel');
+    for (let i = 0; i < cassetteWheels.length; i++) {
+        cassetteWheels[i].classList.remove('cassette-wheel-rotate');
     }
 } 
 
-function zeneInicializalas(){ //beállítja a zene gombjához tartozó event listener-t és a zenét
-    zene = document.getElementById("zene"); 
-    zene.loop = true;
+function musicInitialization(){ //beállítja a zene gombjához tartozó event listener-t és a zenét
+    music = document.getElementById("music");
+    music.loop = true;
 
-    const zeneGomb = document.getElementById('zeneGomb');
+    const musicButton = document.getElementById('musicButton');
 
-    zeneGomb.addEventListener('click', (event)=>{
-        if (zeneFolyamatbanVanE) {
-            zeneMegallitas();
+    musicButton.addEventListener('click', (event)=>{
+        if (isMusicPlaying) {
+            stopMusic();
         } else {
-            zeneLejatszas();
+            playMusic();
         }
     })
 }
 
-function emojiInicializalas() { //beállítja az újraindítás gombot
-    const emoji = document.getElementById('emojiGomb');
-    emoji.addEventListener('click', (event) =>{
-       jatekIndit();
+function emojiInitialization() { //beállítja az újraindítás gombot
+    const emojiButton = document.getElementById('emojiButton');
+    emojiButton.addEventListener('click', (event) =>{
+       startGame();
     });
 }
 
-function emojiArcBeallitas(arc) { //beállítja a megadott ikont 
-    const emojiIkon = document.getElementById('emojiGomb').querySelector('i');
+function setEmojiFace(arc) { //beállítja a megadott ikont
+    const emojiIcon = document.getElementById('emojiButton').querySelector('i');
 
     if (arc === "fa-face-smile") {
-        emojiIkon.classList.remove('fa-face-tired', 'fa-face-laugh-beam');
-        emojiIkon.classList.add('fa-face-smile');
+        emojiIcon.classList.remove('fa-face-tired', 'fa-face-laugh-beam');
+        emojiIcon.classList.add('fa-face-smile');
     } else if (arc === "fa-face-tired") {
-        emojiIkon.classList.remove('fa-face-smile', 'fa-face-laugh-beam');
-        emojiIkon.classList.add('fa-face-tired');
+        emojiIcon.classList.remove('fa-face-smile', 'fa-face-laugh-beam');
+        emojiIcon.classList.add('fa-face-tired');
     } else if (arc === "fa-face-laugh-beam") {
-        emojiIkon.classList.remove('fa-face-tired', 'fa-face-smile');
-        emojiIkon.classList.add('fa-face-laugh-beam');
+        emojiIcon.classList.remove('fa-face-tired', 'fa-face-smile');
+        emojiIcon.classList.add('fa-face-laugh-beam');
     }
 }
 

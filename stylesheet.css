@@ -32,7 +32,7 @@ body{
     background: #00ffff;
 }
 
-.focim{
+.main-title{
     font-family: 'Audiowide', sans-serif;
     font-size: 100px;
     color: #da2784;
@@ -41,7 +41,7 @@ body{
     , 0 0 120px rgba(218, 39, 132, 0.6);
 }
 
-.fo-tarolo {
+.main-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -50,7 +50,7 @@ body{
     max-width: 90%;
 }
 
-.nav-sav {
+.nav-bar {
     display: flex;
     justify-content: space-around;
     width: 100%;
@@ -60,7 +60,7 @@ body{
     border-bottom: 2px solid #00ffff;
 }
 
-.nav-sav button {
+.nav-bar button {
     background: none;
     border: none;
 
@@ -71,13 +71,13 @@ body{
   
 }
 
-.nav-sav button:hover {
+.nav-bar button:hover {
     transform: scale(1.05);
     text-shadow: 0px 0px 16px rgba(0, 255, 255, 1);
   
 }
 
-#tablaFelett, .tabla-alatt{
+#aboveBoard, .below-board{
     display: flex;
     flex-direction: row;
     align-items: end;
@@ -88,24 +88,24 @@ body{
     max-width: 400px;
 }
 
-#tablaFelett {
+#aboveBoard {
     padding-bottom: 5px;
 }
 
-.tabla-alatt {
+.below-board {
     padding-top: 5px;
 }
 
-.tabla-alatt{
+.below-board{
     align-items: start;
 }
 
-.ures-tabla-alatt {
+.below-empty-board {
     width: 109px;
     height: 44px;
 }
 
-.zaszlo-tarolo, .szamlalo-gomb {
+.flags-container, .timer-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,7 +114,7 @@ body{
     width: 130px;
 }
 
-.zaszlo-kepe {
+.flag-image {
     width: 20px;
     height: 20px;
     filter: invert(84%) sepia(96%) saturate(7500%) hue-rotate(104deg) brightness(103%) contrast(102%)
@@ -122,29 +122,29 @@ body{
     border-width: 0;
 }
 
-.zaszloSzamol, #szamlalo {
+.flags-counter, #timer {
     color: rgba(218, 39, 132, 1);
     text-shadow: 0 0 20px rgba(218, 39, 132, 1)
     , 0 0 50px rgba(218, 39, 132, 1)
     , 0 0 110px rgba(218, 39, 132, 1);
 }
 
-#szamlaloGomb {
+#timerButton {
     background: none;
     border: none;
 }
 
-#szamlaloGomb i {
+#timerButton i {
     font-size: 20px;
     color: #00ffff;
 }
 
-#emojiGomb {
+#emojiButton {
     background: none;
     border: none;
 }
 
-#emojiGomb i {
+#emojiButton i {
     font-size: 50px;
     cursor: pointer;
 }
@@ -173,7 +173,7 @@ body{
     box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 0.6);
 }
 
-.border-animacio:hover {
+.border-animation:hover {
     box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 1);
     transform: scale(0.95);
 }
@@ -189,7 +189,7 @@ body{
 
 }
 
-.jatek-tabla-tarolo{
+.game-board-container{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -202,7 +202,7 @@ body{
     border-radius: 5px;
 }
 
-.tabla{
+.board{
     border-style: solid;
     border-width: 1px;
     border-color: #00ffff;
@@ -210,7 +210,7 @@ body{
     justify-items: center;
 }
 
-.mezo-kontener {
+.cell-container {
     width: 100%;
     height: 100%;
     display: flex;
@@ -222,7 +222,7 @@ body{
     box-shadow: 0px 0px 16px 0px rgba(0, 255, 255, 0.6);
   }
 
-.mezok{
+.cell{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -234,16 +234,16 @@ body{
     height: 30px;
 }
 
-.leforditott{
+.faceDown{
     background-color: rgba(6, 23, 42, 1);
     cursor: pointer;
 }
 
-.leforditott:hover {
+.faceDown:hover {
     transform: scale(0.9);
 }
 
-.szam{
+.number{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -253,7 +253,7 @@ body{
     font-family: 'Audiowide', cursive;
 }
 
-.bomba{
+.bomb{
     background-image: url("img/akna_narancs.png");
     background-size: max(24px);
     filter: drop-shadow(0 0 1px rgba(255, 107, 0, 0.8)) drop-shadow(0 0 2px rgba(222, 99, 12, 0)) drop-shadow(0 0 3px rgba(255, 107, 0, 0.0));
@@ -262,7 +262,7 @@ body{
     background-position: center;
 }
 
-.aBomba{
+.firstBomb{
     background-image: url("img/akna_piros.png");
     filter: drop-shadow(0 0 1px rgba(232, 7, 26, 0.9)) drop-shadow(0 0 2px rgba(232, 7, 26, 0.8)) drop-shadow(0 0 3px rgba(232, 7, 26, 0.6));
     border-width: 0;
@@ -271,7 +271,7 @@ body{
     background-position: center;
 }
 
-.zaszlo{
+.flag{
     background-image: url("img/zaszlo.png");
     background-color: transparent;
     background-size: max(24px);
@@ -283,7 +283,7 @@ body{
     border-width: 0;
 }
 
-#szintValaszto, .vesztettel-tarolo, .nyertel-tarolo, #jatekszabalyzatTarolo{
+#levelSelector, .lost-container, .won-container, #gameRulesContainer{
     display: none;
     justify-content: center;
     align-items: center;
@@ -295,7 +295,7 @@ body{
     height: 100%;
 }
 
-.vesztettel, .nyertel {
+.lost, .won {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -307,7 +307,7 @@ body{
     border-radius: 5px;
 }
 
-.vesztettel h2 {
+.lost h2 {
     font-size: 60px;
     padding: 8px 24px;
     font-weight: normal;
@@ -318,7 +318,7 @@ body{
     box-shadow: 0px 0px 16px 0px rgba(232, 7, 26, 0.2);
 }
 
-.nyertel h2 {
+.won h2 {
     font-size: 60px;
     font-weight: 100;
     text-align: center;
@@ -326,7 +326,7 @@ body{
     filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.6)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.6)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
 }
 
-#szintek, .jatekszabalyzat {
+#levels, .game-rules {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -339,14 +339,14 @@ body{
     border-radius: 5px;
 }
 
-.jatekszabalyzat-cim, .szintek-cim {
+.game-rules-title, .levels-title {
     font-size: 32px;
     text-align: center;
     color: #da2784;
     text-shadow: 0 0 30px rgba(218, 39, 132, 0.6), 0 0 60px rgba(218, 39, 132, 0.6), 0 0 120px rgba(218, 39, 132, 0.6);
 }
 
-.jatekszabalyzat-belso-tarolo {
+.game-rules-inside-container {
     height: 100%;
     width: 90%;
     display: flex;
@@ -362,15 +362,15 @@ body{
     text-align: justify;
 }
 
-.jatekszabalyzat-belso-tarolo ul, ol {
+.game-rules-inside-container ul, ol {
     margin-left: 32px;
 }
 
-.jatekszabalyzat-belso-tarolo li, p {
+.game-rules-inside-container li, p {
     margin-top: 8px;
 }
 
-.jatekszabalyzat-belso-tarolo h3 {
+.game-rules-inside-container h3 {
     width: 100%;
     font-size: 20px;
     text-align: start;
@@ -379,7 +379,7 @@ body{
     text-shadow: 0 0 30px rgba(218, 39, 132, 0.6), 0 0 60px rgba(218, 39, 132, 0.6), 0 0 120px rgba(218, 39, 132, 0.6);
 }
 
-.szintek-gombok-tarolo {
+.levels-buttons-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -395,7 +395,7 @@ body{
     text-align: justify;
 }
 
-.szintek-gombok-tarolo button {
+.levels-buttons-container button {
     width: 240px;
     padding: 20px;
     font-size: 24px;
@@ -408,26 +408,26 @@ body{
     text-transform: uppercase;
 }
 
-.szintek-gombok-tarolo button:not(:disabled):hover {
+.levels-buttons-container button:not(:disabled):hover {
     filter: drop-shadow(0 0 1px rgba(0, 255, 255, 0.5)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.4)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
     box-shadow: 0 0 4px 1px rgba(0, 255, 255, 0.8);
 }
 
-.szintek-gombok-tarolo button:disabled {
+.levels-buttons-container button:disabled {
     cursor: auto;
     color: rgba(0, 255, 255, 0.4);
     border: 1px solid rgba(0, 255, 255, 0.4);
     background-color: #00ffff0a;
 }
 
-.szintek-bezaras-tarolo, .jatekszabalyzat-bezaras-tarolo {
+.levels-close-container, .game-rules-close-container {
     display: flex;
     justify-content: end;
     align-items: center;
     width: 100%;
 }
 
-.szintek-bezaras, .jatekszabalyzat-bezaras {
+.levels-close, .game-rules-close {
     background-color: transparent;
     padding: 4px 6px;
     margin: 16px 16px 0 0;
@@ -439,22 +439,22 @@ body{
     cursor: pointer;
 }
 
-.szintek-bezaras:hover, .jatekszabalyzat-bezaras:hover {
+.levels-close:hover, .game-rules-close:hover {
     filter: drop-shadow(0 0 1px rgba(232, 7, 26, 1)) drop-shadow(0 0 2px rgba(232, 7, 26, 0.9)) drop-shadow(0 0 3px rgba(232, 7, 26, 0.8));;
     box-shadow: 0 0 4px 1px rgb(232, 7, 26, 0.2);
 }
 
-.tevesZaszlo{
+.wrongFlag{
     filter: invert(10%) sepia(94%) saturate(7075%) hue-rotate(352deg) brightness(92%) contrast(98%)
     drop-shadow(0 0 1px rgba(232, 7, 26, 0.9)) drop-shadow(0 0 2px rgba(232, 7, 26, 0.8)) drop-shadow(0 0 3px rgba(232, 7, 26, 0.6));
 }
 
-.zene-lejatszas {
+.music-player {
     width: 130px;
     padding: 0;
 }
 
-.kazetta-tarolo {
+.cassette-container {
     margin: -5px;
     width: calc(100% + 10px);
     height: auto;
@@ -462,36 +462,36 @@ body{
     cursor: pointer;
 }
 
-.kazetta-ures, .kazetta-kor {
+.cassette-empty, .cassette-wheel {
     filter: invert(84%) sepia(96%) saturate(7500%) hue-rotate(104deg) brightness(103%) contrast(102%)
             drop-shadow(0 0 1px rgba(0, 255, 255, 0.5)) drop-shadow(0 0 2px rgba(0, 255, 255, 0.4)) drop-shadow(0 0 3px rgba(0, 255, 255, 0.6));
 }
 
-.kazetta-ures {
+.cassette-empty {
     width: 100%;
     height: auto;
 }
 
-.kazetta-kor {
+.cassette-wheel {
     width: 18px;
     height: 18px;
     position: absolute;
     top: 36%;
 }
 
-.kazetta-kor-bal {
+.cassette-wheel-left {
     right: 23%;
 }
 
-.kazetta-kor-jobb {
+.cassette-wheel-right {
     left: 23%;
 }
 
-.kazetta-forgatas {
-    animation: forgas 2s linear infinite;
+.cassette-wheel-rotate {
+    animation: rotate 2s linear infinite;
 }
 
-@keyframes forgas {
+@keyframes rotate {
     from {
         transform: rotate(0deg);
     }
@@ -500,25 +500,25 @@ body{
     }
 }
 
-#szintek, #jatekszabalyzat {
+#levels, #gameRules {
     position: fixed;
     transform: scale(2);
     opacity: 0;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
-.vesztettel, .nyertel {
+.lost, .won {
     position: fixed;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
 
-.popup-scale-in #szintek, .popup-scale-in #jatekszabalyzat {
+.popup-scale-in #levels, .popup-scale-in #gameRules {
     transform: scale(1);
     opacity: 1;
 }
 
-.popup-scale-in .vesztettel, .popup-scale-in .nyertel {
+.popup-scale-in .lost, .popup-scale-in .won {
     opacity: 1;
 }
 
