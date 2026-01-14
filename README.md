@@ -5,8 +5,7 @@
 ## Projektleírás
 
 A Minesweeper – Neon Edition egy klasszikus Aknakereső játék modern, neon-fényű, futurisztikus cyberpunk stílusban.  
-A cél egy látványos, mégis áttekinthető felület, ahol a játékos különböző nehézségi szinteken teheti próbára logikai készségeit.  
-A felület vizuálisan erősen stílusolt: ragyogó keretek, élénk fénycsíkok és kontrasztos színek kísérik a játékmenetet.
+A cél egy látványos, mégis áttekinthető felület, ahol a játékos különböző nehézségi szinteken teheti próbára logikai készségeit. 
 
 A teljes játék a böngészőben fut, minden logikai működés JavaScriptben lett megvalósítva.
 
@@ -76,4 +75,5 @@ A játék akkor ér véget sikeresen, ha:
 ## Készítette
 
 **Név**  
+Gulyás Csilla
 Frontend játékprojekt, 2024
